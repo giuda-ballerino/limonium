@@ -1,0 +1,279 @@
+/* Limonium Farm - Bold & Colorful Design System */
+
+:root {
+  /* Primary Color Palette */
+  --color-coral-red: #CC5151;
+  --color-lavender: #52489C;
+  --color-lime: #BCD747;
+  --color-peach: #DE8756;
+  
+  /* Neutral Colors */
+  --color-white: #FFFFFF;
+  --color-black: #1A1A1A;
+  --color-gray-light: #F5F5F5;
+  --color-gray-dark: #333333;
+  
+  /* Typography */
+  --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-heading: 'Georgia', 'Times New Roman', serif;
+  --font-sacramento: 'Sacramento', cursive;
+  
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 4rem;
+  --spacing-xl: 6rem;
+  --spacing-2xl: 8rem;
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* Font Face - Sacramento */
+@font-face {
+  font-family: 'Sacramento';
+  src: url('../fonts/Sacramento-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Base Styles */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-primary);
+  color: var(--color-black);
+  background-color: var(--color-white);
+  overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-sm);
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+p {
+  margin-bottom: var(--spacing-sm);
+  font-size: clamp(1rem, 2vw, 1.125rem);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* Section Styles - Colorful Background Variations */
+.section {
+  padding: var(--spacing-xl) 0;
+  position: relative;
+  overflow: visible;
+  min-height: 100vh;
+  z-index: 1;
+}
+
+.section--coral-red {
+  background-color: var(--color-coral-red);
+  color: var(--color-white);
+}
+
+.section--lavender {
+  background-color: var(--color-lavender);
+  color: var(--color-white);
+}
+
+.section--white {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.section--peach {
+  background-color: var(--color-peach);
+  color: var(--color-white);
+}
+
+.section--black {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+/* Section Circular Reveal Transition Effect */
+.section__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  pointer-events: none;
+  will-change: clip-path, opacity;
+  /* Circle starts at bottom center with 0 radius */
+  clip-path: circle(0% at 50% 100%);
+  opacity: 0;
+}
+
+.section__content {
+  position: relative;
+  z-index: 3;
+}
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  padding-bottom: 10vh;
+}
+
+.hero .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.hero__logo {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  display: block;
+}
+
+.hero__logo img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hero__subtitle {
+  font-family: var(--font-sacramento);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 400;
+  color: var(--color-lime);
+  line-height: 1.4;
+  white-space: pre-line;
+  max-width: 800px;
+}
+
+/* Grid System */
+.grid {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.grid--4 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 3px solid currentColor;
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn:hover {
+  background-color: currentColor;
+  color: var(--color-white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn--filled {
+  background-color: currentColor;
+  color: var(--color-white);
+}
+
+.btn--filled:hover {
+  background-color: transparent;
+  color: currentColor;
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .section {
+    padding: var(--spacing-lg) 0;
+  }
+  
+  .grid--2,
+  .grid--3,
+  .grid--4 {
+    grid-template-columns: 1fr;
+  }
+}

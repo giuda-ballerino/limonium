@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ "css/reset.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+  
+  {{ block "head" . }}{{ end }}
+</head>
+<body>
+  {{ block "header" . }}{{ end }}
+  
+  <main>
+    {{ block "main" . }}{{ end }}
+  </main>
+  
+  {{ block "footer" . }}{{ end }}
+  
+  <!-- JavaScript -->
+  <script src="{{ "js/section-transition.js" | relURL }}"></script>
+  
+  {{ block "scripts" . }}{{ end }}
+</body>
+</html>

@@ -1,0 +1,23 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'Limonium'
+
+# Hugo configuration
+theme = ''
+
+# Build settings
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+
+# Server settings (for live reload)
+[server]
+  port = 1313
+
+# Pagination
+[pagination]
+  pagerSize = 10
+
+# Disable taxonomies for now (can enable later if needed)
+[taxonomies]
+
