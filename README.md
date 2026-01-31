@@ -14,6 +14,11 @@ This project uses:
 
 **Quick start:**
 ```bash
+./hugo-start
+```
+
+Or use the longer script:
+```bash
 ./dev.sh
 ```
 

@@ -1,0 +1,4 @@
+#!/bin/bash
+# Shortcut to start Hugo dev server
+
+exec hugo server --buildDrafts --navigateToChanged
