@@ -14,6 +14,8 @@ This project uses:
 
 **Quick start:**
 ```bash
+# first time only:
+# cp .env.example .env.local && edit .env.local
 ./hugo-start
 ```
 
@@ -115,3 +117,13 @@ hugo --minify
 - [Hugo Documentation](https://gohugo.io/documentation/)
 - [Decap CMS Documentation](https://decapcms.org/docs/)
 - [Hugo Themes](https://themes.gohugo.io/)
+
+## Shopify integration
+
+This project includes a `/shop` page that loads products from Shopify Storefront API.
+
+Full setup steps are in `SHOPIFY_SETUP.md`.
+
+Admin OAuth helper scripts:
+- `scripts/shopify-get-admin-token.sh`
+- `scripts/shopify-query-admin-products.sh`

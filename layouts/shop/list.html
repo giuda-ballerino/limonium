@@ -1,0 +1,83 @@
+{{ define "main" }}
+  {{ $shopDomain := getenv "SHOPIFY_STORE_DOMAIN" }}
+  {{ $storefrontToken := getenv "SHOPIFY_STOREFRONT_ACCESS_TOKEN" }}
+  {{ $apiVersion := getenv "SHOPIFY_API_VERSION" | default "2025-01" }}
+
+  <section class="section section--lavender shop">
+    <div class="section__transition" aria-hidden="true"></div>
+    <div class="section__content">
+      <div class="container">
+        <div class="text-center mb-md">
+          <span class="section-heading section-heading--squiggle section-heading--white section-heading--bg-coral">shop</span>
+        </div>
+
+        <p class="shop__intro text-off-white">
+          Scopri i nostri prodotti stagionali. La selezione qui sotto viene aggiornata automaticamente da Shopify.
+        </p>
+
+        <div class="shop-cart-bar">
+          <button id="shop-cart-toggle" class="shop-cart-toggle" type="button" aria-haspopup="dialog" aria-controls="shop-cart-drawer">
+            Carrello (<span id="shop-cart-count">0</span>)
+          </button>
+        </div>
+
+        <div
+          id="shopify-products"
+          class="shop-groups"
+          data-shop-domain="{{ $shopDomain }}"
+          data-storefront-token="{{ $storefrontToken }}"
+          data-api-version="{{ $apiVersion }}"
+          data-priority-categories="Ortofrutta|Merchandising"
+        >
+          <p class="shop-message text-off-white">Caricamento prodotti...</p>
+        </div>
+
+        <aside id="shop-cart-drawer" class="shop-cart-drawer" hidden>
+          <div class="shop-cart-drawer__header">
+            <h2 class="shop-cart-drawer__title">Il tuo carrello</h2>
+            <button id="shop-cart-close" class="shop-cart-drawer__close" type="button" aria-label="Chiudi carrello">x</button>
+          </div>
+          <div id="shop-cart-items" class="shop-cart-items">
+            <p class="shop-cart-empty">Il carrello e' vuoto.</p>
+          </div>
+          <div class="shop-cart-drawer__footer">
+            <p id="shop-cart-total" class="shop-cart-total">Totale: EUR 0,00</p>
+            <button id="shop-cart-checkout" class="shop-cart-checkout" type="button" disabled>Vai al checkout</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+{{ end }}
+
+{{ define "scripts" }}
+  {{ $shopCartJsVersion := md5 (readFile "static/js/shopify-cart.js") }}
+  {{ $shopJsVersion := md5 (readFile "static/js/shopify-products.js") }}
+  <script src="{{ "js/shopify-cart.js" | relURL }}?v={{ $shopCartJsVersion }}"></script>
+  <script src="{{ "js/shopify-products.js" | relURL }}?v={{ $shopJsVersion }}"></script>
+{{ end }}
+
+{{ define "footer" }}
+  <footer class="site-footer">
+    <div class="container site-footer__content">
+      <div class="site-footer__left">
+        <p class="site-footer__text">
+          Limonium Flower Farm<br>
+          Contrada Mortilluzzi, Selinunte<br>
+          Email: <a href="mailto:federica.piccolo@limoniumflowerfarm.it">federica.piccolo@limoniumflowerfarm.it</a>
+        </p>
+        <a class="site-footer__map" href="https://maps.app.goo.gl/8fWvKEU5ANnVBevCA" target="_blank" rel="noopener">
+          <img src="{{ "images/map.webp" | relURL }}" alt="Mappa - Contrada Mortilluzzi, Selinunte">
+        </a>
+        <a class="site-footer__social" href="https://www.instagram.com/limonium_flowerfarm/?hl=en" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 7.3a4.7 4.7 0 1 0 0 9.4 4.7 4.7 0 0 0 0-9.4Zm0 7.6a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8Zm6.1-7.9a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0Z"/>
+            <path d="M7.2 2.5h9.6A4.7 4.7 0 0 1 21.5 7.2v9.6a4.7 4.7 0 0 1-4.7 4.7H7.2a4.7 4.7 0 0 1-4.7-4.7V7.2A4.7 4.7 0 0 1 7.2 2.5Zm0 2A2.7 2.7 0 0 0 4.5 7.2v9.6a2.7 2.7 0 0 0 2.7 2.7h9.6a2.7 2.7 0 0 0 2.7-2.7V7.2a2.7 2.7 0 0 0-2.7-2.7H7.2Z"/>
+          </svg>
+        </a>
+      </div>
+      <hr class="site-footer__hr">
+      <p class="site-footer__copyright">© 2025 Limonium Flower Farm - Tutti i diritti riservati</p>
+    </div>
+  </footer>
+{{ end }}
