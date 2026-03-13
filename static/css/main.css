@@ -474,7 +474,7 @@ a:hover {
 
 @media (max-width: 1024px) {
   .products__corner {
-    width: 180px;
+    display: none;
   }
 }
 
@@ -520,6 +520,7 @@ a:hover {
   max-width: 1200px;
   margin: 0 auto;
 }
+
 
 .hero__logo {
   width: 100%;
@@ -581,7 +582,37 @@ a:hover {
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .hero__image {
-    display: none;
+    display: block;
+    bottom: auto;
+    top: 0;
+  }
+
+  .hero__image img {
+    transform: translateY(100%) scaleY(-1);
+    transform-origin: top center;
+  }
+
+  .hero__image--left img {
+    max-height: 55vh;
+    height: 55vh;
+  }
+
+  .hero__image--right img {
+    max-height: 45vh;
+    height: 45vh;
+    transform: translateY(88%) scaleY(-1);
+  }
+
+  .hero__image--left {
+    left: -3rem;
+  }
+
+  .hero__image--right {
+    right: -4.5rem;
+  }
+
+  .hero__content {
+    padding-top: clamp(10rem, 28vh, 16rem);
   }
 }
 
@@ -656,7 +687,7 @@ a:hover {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .container {
+  .container, .hero__content, .hero .container {
     padding: 0 var(--spacing-sm);
   }
   
