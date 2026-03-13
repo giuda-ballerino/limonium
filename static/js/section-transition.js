@@ -1,6 +1,7 @@
 (() => {
   const sections = Array.from(document.querySelectorAll(".section"));
   if (!sections.length) return;
+  const HERO_START_PROGRESS_OFFSET = 0.5;
 
   const sectionPairs = sections
     .map((section, index) => ({
@@ -27,10 +28,13 @@
       const height = rect.height || 1;
       const width = rect.width || 1;
 
-      const progress = Math.min(
+      const baseProgress = Math.min(
         Math.max((windowHeight - rect.bottom) / height, 0),
-        1
+        1,
       );
+      const progress = section.classList.contains("hero")
+        ? Math.min(baseProgress + HERO_START_PROGRESS_OFFSET, 1)
+        : baseProgress;
 
       const maxRadius = Math.hypot(width / 2, height);
       const radius = progress * maxRadius;
