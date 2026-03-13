@@ -30,6 +30,8 @@ If `Product type` is empty, it falls back to tags in this format:
 4. Open the app and click `Configure Storefront API scopes` (or `Configure` under Storefront API, depending on UI version).
 5. In the scope list, enable:
    - `unauthenticated_read_product_listings`
+   - `unauthenticated_read_checkouts`
+   - `unauthenticated_write_checkouts`
    - optionally `unauthenticated_read_product_inventory` if you later show stock
 6. Click `Save`.
 7. Click `Install app` (or `Install`).

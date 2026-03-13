@@ -31,9 +31,18 @@
             description
             productType
             tags
+            onlineStoreUrl
             featuredImage {
               url
               altText
+            }
+            variants(first: 10) {
+              edges {
+                node {
+                  id
+                  availableForSale
+                }
+              }
             }
             priceRange {
               minVariantPrice {
@@ -180,7 +189,10 @@
       style: "currency",
       currency: currency,
     }).format(amount);
-    const productUrl = `https://${domain}/products/${product.handle}`;
+    const productUrl = product.onlineStoreUrl || `https://${domain}/products/${product.handle}`;
+    const selectedVariant = getFirstPurchasableVariant(product);
+    const firstVariantId = selectedVariant ? selectedVariant.id : "";
+    const isAvailable = Boolean(selectedVariant && selectedVariant.availableForSale);
     const shortDescription = (product.description || "").slice(0, 130);
 
     return `
@@ -203,10 +215,57 @@
           }
           <div class="shop-card__footer">
             <span class="shop-card__price">${formattedPrice}</span>
-            <a class="shop-card__link" href="${productUrl}" target="_blank" rel="noopener">Acquista</a>
+            ${
+              isAvailable
+                ? `<div class="shop-card__actions">
+                    <a class="shop-card__link" href="${productUrl}" target="_blank" rel="noopener">Acquista ora</a>
+                    <button
+                      class="shop-card__cart-button"
+                      type="button"
+                      data-variant-id="${escapeHtml(firstVariantId)}"
+                    >
+                      Aggiungi al carrello
+                    </button>
+                  </div>`
+                : '<span class="shop-card__availability">Non disponibile</span>'
+            }
           </div>
         </div>
       </article>
     `;
+  }
+
+  container.addEventListener("click", function (event) {
+    const button = event.target.closest(".shop-card__cart-button");
+    if (!button) return;
+
+    const variantId = button.dataset.variantId;
+    if (!variantId) return;
+    if (!window.ShopifyCart || typeof window.ShopifyCart.addLine !== "function") return;
+
+    button.disabled = true;
+    window.ShopifyCart
+      .addLine(variantId, 1)
+      .catch(function (error) {
+        console.error("Cart add error:", error);
+        if (error && error.message) {
+          window.alert(error.message);
+        }
+      })
+      .finally(function () {
+        button.disabled = false;
+      });
+  });
+
+  function getFirstPurchasableVariant(product) {
+    const edges = product && product.variants ? product.variants.edges || [] : [];
+    if (!edges.length) return null;
+
+    const availableEdge = edges.find(function (edge) {
+      return edge && edge.node && edge.node.availableForSale;
+    });
+
+    if (availableEdge && availableEdge.node) return availableEdge.node;
+    return edges[0] && edges[0].node ? edges[0].node : null;
   }
 })();

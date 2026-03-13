@@ -740,6 +740,24 @@ a:hover {
   align-items: stretch;
 }
 
+.shop-cart-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-sm);
+}
+
+.shop-cart-toggle {
+  border: 1px solid var(--color-off-white);
+  background: var(--color-off-black);
+  color: var(--color-off-white);
+  border-radius: 999px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .shop-card {
   background-color: var(--color-off-white);
   color: var(--color-off-black);
@@ -782,15 +800,19 @@ a:hover {
 
 .shop-card__footer {
   margin-top: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
   gap: 0.75rem;
 }
 
 .shop-card__price {
   font-size: 1.05rem;
   font-weight: 700;
+}
+
+.shop-card__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .shop-card__link {
@@ -808,9 +830,34 @@ a:hover {
   letter-spacing: 0.04em;
 }
 
+.shop-card__cart-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--color-off-black);
+  background-color: transparent;
+  color: var(--color-off-black);
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .shop-card__link:hover {
   opacity: 1;
   background-color: var(--color-lavender);
+}
+
+.shop-card__cart-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.shop-card__cart-button:hover:not(:disabled) {
+  background-color: var(--color-off-black);
+  color: var(--color-off-white);
 }
 
 .shop-message {
@@ -820,4 +867,118 @@ a:hover {
 
 .shop-message--error {
   font-weight: 700;
+}
+
+.shop-cart-drawer {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: min(390px, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  background: var(--color-off-white);
+  color: var(--color-off-black);
+  border-radius: 12px;
+  border: 1px solid var(--color-off-black);
+  padding: 1rem;
+  z-index: 999;
+}
+
+.shop-cart-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.shop-cart-drawer__title {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-size: 1.2rem;
+}
+
+.shop-cart-drawer__close {
+  border: 1px solid var(--color-off-black);
+  background: transparent;
+  border-radius: 999px;
+  padding: 0.2rem 0.45rem;
+}
+
+.shop-cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.shop-cart-item {
+  border: 1px solid #dad0d0;
+  border-radius: 10px;
+  padding: 0.6rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.shop-cart-item__title,
+.shop-cart-item__variant,
+.shop-cart-item__price {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.shop-cart-item__title {
+  font-weight: 700;
+}
+
+.shop-cart-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.shop-cart-item__actions button {
+  border: 1px solid var(--color-off-black);
+  background: transparent;
+  border-radius: 999px;
+  padding: 0.2rem 0.45rem;
+}
+
+.shop-cart-drawer__footer {
+  border-top: 1px solid #dad0d0;
+  padding-top: 0.75rem;
+}
+
+.shop-cart-total {
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+}
+
+.shop-cart-checkout {
+  width: 100%;
+  border: 1px solid var(--color-off-black);
+  background: var(--color-lavender);
+  color: var(--color-off-white);
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.shop-cart-checkout:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.shop-cart-empty {
+  margin: 0;
+}
+
+.shop-card__availability {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #6d6666;
 }
