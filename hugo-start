@@ -1,4 +1,16 @@
 #!/bin/bash
 # Shortcut to start Hugo dev server
 
+# Load local environment variables if available.
+# `.env.local` has priority over `.env`.
+if [ -f ".env.local" ]; then
+  set -a
+  source ".env.local"
+  set +a
+elif [ -f ".env" ]; then
+  set -a
+  source ".env"
+  set +a
+fi
+
 exec hugo server --buildDrafts --navigateToChanged

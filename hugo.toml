@@ -21,3 +21,7 @@ buildExpired = false
 # Disable taxonomies for now (can enable later if needed)
 [taxonomies]
 
+[security]
+  [security.funcs]
+    getenv = ['^HUGO_', '^CI$', '^SHOPIFY_STORE_DOMAIN$', '^SHOPIFY_STOREFRONT_ACCESS_TOKEN$', '^SHOPIFY_API_VERSION$']
+

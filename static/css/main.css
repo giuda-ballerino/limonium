@@ -701,3 +701,123 @@ a:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* Shop Page */
+.shop {
+  min-height: 100vh;
+}
+
+.shop__intro {
+  max-width: 780px;
+  margin: 0 auto var(--spacing-lg);
+  text-align: center;
+}
+
+.shop-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.shop-category {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.shop-category__title {
+  font-family: var(--font-sacramento);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--spacing-md);
+  align-items: stretch;
+}
+
+.shop-card {
+  background-color: var(--color-off-white);
+  color: var(--color-off-black);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.shop-card__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.shop-card__image--placeholder {
+  background: linear-gradient(135deg, #f8d2d2 0%, #f1aa73 100%);
+}
+
+.shop-card__body {
+  padding: 1rem 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.shop-card__title {
+  font-family: var(--font-primary);
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.shop-card__description {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.shop-card__footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.shop-card__price {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.shop-card__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--color-off-black);
+  background-color: var(--color-coral-red);
+  color: var(--color-off-white);
+  padding: 0.45rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.shop-card__link:hover {
+  opacity: 1;
+  background-color: var(--color-lavender);
+}
+
+.shop-message {
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+.shop-message--error {
+  font-weight: 700;
+}
