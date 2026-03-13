@@ -8,6 +8,7 @@
   {{ $resetCssVersion := md5 (readFile "static/css/reset.css") }}
   {{ $mainCssVersion := md5 (readFile "static/css/main.css") }}
   {{ $sectionTransitionJsVersion := md5 (readFile "static/js/section-transition.js") }}
+  {{ $navbarJsVersion := md5 (readFile "static/js/navbar.js") }}
   
   <!-- CSS -->
   <link rel="stylesheet" href="{{ "css/reset.css" | relURL }}?v={{ $resetCssVersion }}">
@@ -15,8 +16,27 @@
   
   {{ block "head" . }}{{ end }}
 </head>
-<body>
-  {{ block "header" . }}{{ end }}
+<body class="{{ if .IsHome }}is-home{{ else }}is-inner{{ end }}">
+  {{ block "header" . }}
+    <header class="site-header">
+      <div class="container">
+        <div class="site-header__content">
+          <a class="site-header__logo" href="/" aria-label="Limonium home">
+            <img src="{{ "images/logo.svg" | relURL }}" alt="Limonium" />
+          </a>
+          <nav class="site-nav" aria-label="Primary">
+            <a
+              class="cta-button site-nav__cta"
+              href="/shop"
+              style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;"
+            >
+              acquista
+            </a>
+          </nav>
+        </div>
+      </div>
+    </header>
+  {{ end }}
   
   <main>
     {{ block "main" . }}{{ end }}
@@ -26,6 +46,7 @@
   
   <!-- JavaScript -->
   <script src="{{ "js/section-transition.js" | relURL }}?v={{ $sectionTransitionJsVersion }}"></script>
+  <script src="{{ "js/navbar.js" | relURL }}?v={{ $navbarJsVersion }}"></script>
   
   {{ block "scripts" . }}{{ end }}
 </body>
