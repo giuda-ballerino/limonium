@@ -1,84 +1,96 @@
 {{ define "main" }}
   <!-- Hero Section -->
   <section class="section section--coral-red hero">
+    <div class="section__transition" aria-hidden="true"></div>
     <div class="hero__image hero__image--left">
       <img src="{{ "images/fiore.webp" | relURL }}" alt="Fiore" />
     </div>
     <div class="hero__image hero__image--right">
       <img src="{{ "images/fico.webp" | relURL }}" alt="Fico" />
     </div>
-    <div class="container hero__content">
-      <div class="hero__logo">
-        <img src="{{ "images/logo.svg" | relURL }}" alt="Limonium" />
-      </div>
-      <p class="hero__subtitle">flower farm
+    <div class="section__content">
+      <div class="container hero__content">
+        <div class="hero__logo">
+          <img src="{{ "images/logo.svg" | relURL }}" alt="Limonium" />
+        </div>
+        <p class="hero__subtitle">flower farm
 +
 market garden</p>
+      </div>
     </div>
   </section>
 
   <!-- About Section -->
   <section class="section section--lavender" id="mission">
-    <div class="container mission">
-      <div class="text-center mb-sm">
-        <span class="section-heading section-heading--squiggle section-heading--white section-heading--bg-coral">mission</span>
+    <div class="section__transition" aria-hidden="true"></div>
+    <div class="section__content">
+      <div class="container mission">
+        <div class="text-center mb-sm">
+          <span class="section-heading section-heading--squiggle section-heading--white section-heading--bg-coral">mission</span>
+        </div>
+        <div class="mission__intro">
+          <img class="mission__icon" src="{{ "images/fede.webp" | relURL }}" alt="Fede" />
+          <p class="mission__text text-off-white">Limonium Flower Farm nasce a Selinunte con l’obiettivo di coltivare <strong>fiori recisi, piante officinali e ortaggi di qualità</strong>, seguendo i principi della <strong>permacultura</strong> e dell’<strong>agricoltura rigenerativa</strong> per salvaguardare il suolo e valorizzare il territorio. Ci impegniamo a promuovere un <strong>legame sostenibile</strong> tra uomo e natura, utilizzando <strong>varietà locali</strong>, sistemi di coltura efficienti e <strong>filiera corta</strong>.</p>
+        </div>
+        <div class="mission__gallery">
+          <img class="mission__photo" src="{{ "images/jojo.webp" | relURL }}" alt="Jojo" />
+          <img class="mission__spacer" src="{{ "images/flower.webp" | relURL }}" alt="" aria-hidden="true" />
+          <img class="mission__photo" src="{{ "images/joscha.webp" | relURL }}" alt="Joscha" />
+          <img class="mission__spacer" src="{{ "images/flower.webp" | relURL }}" alt="" aria-hidden="true" />
+          <img class="mission__photo" src="{{ "images/catel.webp" | relURL }}" alt="Catel" />
+        </div>
+        <p class="mission__text text-off-white">Con <strong>workshop e seminari</strong> trasferiamo la passione per la terra, dalla <strong>semina alla vendita</strong>, per creare un’esperienza autentica e consapevole di rispetto per l'<strong>ambiente e la biodiversità</strong>.</p>
       </div>
-      <div class="mission__intro">
-        <img class="mission__icon" src="{{ "images/fede.webp" | relURL }}" alt="Fede" />
-        <p class="mission__text text-off-white">Limonium Flower Farm nasce a Selinunte con l’obiettivo di coltivare <strong>fiori recisi, piante officinali e ortaggi di qualità</strong>, seguendo i principi della <strong>permacultura</strong> e dell’<strong>agricoltura rigenerativa</strong> per salvaguardare il suolo e valorizzare il territorio. Ci impegniamo a promuovere un <strong>legame sostenibile</strong> tra uomo e natura, utilizzando <strong>varietà locali</strong>, sistemi di coltura efficienti e <strong>filiera corta</strong>.</p>
-      </div>
-      <div class="mission__gallery">
-        <img class="mission__photo" src="{{ "images/jojo.webp" | relURL }}" alt="Jojo" />
-        <img class="mission__spacer" src="{{ "images/flower.webp" | relURL }}" alt="" aria-hidden="true" />
-        <img class="mission__photo" src="{{ "images/joscha.webp" | relURL }}" alt="Joscha" />
-        <img class="mission__spacer" src="{{ "images/flower.webp" | relURL }}" alt="" aria-hidden="true" />
-        <img class="mission__photo" src="{{ "images/catel.webp" | relURL }}" alt="Catel" />
-      </div>
-      <p class="mission__text text-off-white">Con <strong>workshop e seminari</strong> trasferiamo la passione per la terra, dalla <strong>semina alla vendita</strong>, per creare un’esperienza autentica e consapevole di rispetto per l'<strong>ambiente e la biodiversità</strong>.</p>
     </div>
   </section>
 
   <!-- Features Section -->
   <section class="section section--coral-red section--products">
-    <img class="products__corner" src="{{ "images/cachi.webp" | relURL }}" alt="" aria-hidden="true" />
-    <div class="container text-off-black">
-      <div class="text-center mb-md">
-        <span class="section-heading section-heading--squiggle section-heading--black section-heading--bg-apricot">prodotti</span>
-      </div>
-      <div class="products__content">
-        <p class="products__text">Offriamo <strong>fiori recisi unici</strong>, <strong>piante officinali</strong>, <strong>ortaggi freschi</strong> e <strong>olio extravergine di oliva biologico</strong>, ottenuto da olive <strong>Nocellara del Belice</strong> senza pesticidi.</p>
-        <p class="products__text">L’olio viene lavorato con tecniche che ne preservano <strong>aroma</strong> e <strong>proprietà nutritive</strong>. Puoi acquistare in azienda o prenotare la consegna a domicilio, assicurandoti prodotti <strong>freschi</strong>, <strong>genuini</strong> e <strong>tracciabili</strong>.</p>
-      </div>
-      <div class="products__actions">
-        <a class="cta-button" href="/shop" style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;">acquista</a>
+    <div class="section__transition" aria-hidden="true"></div>
+    <div class="section__content">
+      <img class="products__corner" src="{{ "images/cachi.webp" | relURL }}" alt="" aria-hidden="true" />
+      <div class="container text-off-black">
+        <div class="text-center mb-md">
+          <span class="section-heading section-heading--squiggle section-heading--black section-heading--bg-apricot">prodotti</span>
+        </div>
+        <div class="products__content">
+          <p class="products__text">Offriamo <strong>fiori recisi unici</strong>, <strong>piante officinali</strong>, <strong>ortaggi freschi</strong> e <strong>olio extravergine di oliva biologico</strong>, ottenuto da olive <strong>Nocellara del Belice</strong> senza pesticidi.</p>
+          <p class="products__text">L’olio viene lavorato con tecniche che ne preservano <strong>aroma</strong> e <strong>proprietà nutritive</strong>. Puoi acquistare in azienda o prenotare la consegna a domicilio, assicurandoti prodotti <strong>freschi</strong>, <strong>genuini</strong> e <strong>tracciabili</strong>.</p>
+        </div>
+        <div class="products__actions">
+          <a class="cta-button" href="/shop" style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;">acquista</a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Regenerative Agriculture Section -->
   <section class="section section--peach">
-    <div class="container">
-      <div class="text-center mb-lg">
-        <h2 class="section-title text-off-black">Agricoltura rigenerativa, sostenibilità e passione per la natura</h2>
-      </div>
-      <div class="gallery">
-        <div class="gallery__item">
-          <img src="{{ "images/g1.webp" | relURL }}" alt="" aria-hidden="true" />
+    <div class="section__transition" aria-hidden="true"></div>
+    <div class="section__content">
+      <div class="container">
+        <div class="text-center mb-lg">
+          <h2 class="section-title text-off-black">Agricoltura rigenerativa, sostenibilità e passione per la natura</h2>
         </div>
-        <div class="gallery__item">
-          <img src="{{ "images/g2.webp" | relURL }}" alt="" aria-hidden="true" />
-        </div>
-        <div class="gallery__item">
-          <img src="{{ "images/g3.webp" | relURL }}" alt="" aria-hidden="true" />
-        </div>
-        <div class="gallery__item">
-          <img src="{{ "images/g4.webp" | relURL }}" alt="" aria-hidden="true" />
-        </div>
-        <div class="gallery__item">
-          <img src="{{ "images/g5.webp" | relURL }}" alt="" aria-hidden="true" />
-        </div>
-        <div class="gallery__item">
-          <img src="{{ "images/g6.webp" | relURL }}" alt="" aria-hidden="true" />
+        <div class="gallery">
+          <div class="gallery__item">
+            <img src="{{ "images/g1.webp" | relURL }}" alt="" aria-hidden="true" />
+          </div>
+          <div class="gallery__item">
+            <img src="{{ "images/g2.webp" | relURL }}" alt="" aria-hidden="true" />
+          </div>
+          <div class="gallery__item">
+            <img src="{{ "images/g3.webp" | relURL }}" alt="" aria-hidden="true" />
+          </div>
+          <div class="gallery__item">
+            <img src="{{ "images/g4.webp" | relURL }}" alt="" aria-hidden="true" />
+          </div>
+          <div class="gallery__item">
+            <img src="{{ "images/g5.webp" | relURL }}" alt="" aria-hidden="true" />
+          </div>
+          <div class="gallery__item">
+            <img src="{{ "images/g6.webp" | relURL }}" alt="" aria-hidden="true" />
+          </div>
         </div>
       </div>
     </div>

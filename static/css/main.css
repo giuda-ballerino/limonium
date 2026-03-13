@@ -115,7 +115,7 @@ a:hover {
 .section {
   padding: var(--spacing-xl) 0;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   min-height: 100vh;
   z-index: 1;
 }
@@ -143,6 +143,22 @@ a:hover {
 .section--black {
   background-color: var(--color-black);
   color: var(--color-white);
+}
+
+/* Section Transition */
+.section__transition {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--next-bg, transparent);
+  clip-path: circle(0px at 50% 100%);
+  will-change: clip-path;
+  pointer-events: none;
+}
+
+.section__content {
+  position: relative;
+  z-index: 1;
 }
 
 .text-off-black {
