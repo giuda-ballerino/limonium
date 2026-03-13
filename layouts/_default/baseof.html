@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
   <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+  {{ $resetCssVersion := md5 (readFile "static/css/reset.css") }}
+  {{ $mainCssVersion := md5 (readFile "static/css/main.css") }}
+  {{ $sectionTransitionJsVersion := md5 (readFile "static/js/section-transition.js") }}
   
   <!-- CSS -->
-  <link rel="stylesheet" href="{{ "css/reset.css" | relURL }}">
-  <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "css/reset.css" | relURL }}?v={{ $resetCssVersion }}">
+  <link rel="stylesheet" href="{{ "css/main.css" | relURL }}?v={{ $mainCssVersion }}">
   
   {{ block "head" . }}{{ end }}
 </head>
@@ -20,6 +23,9 @@
   </main>
   
   {{ block "footer" . }}{{ end }}
+  
+  <!-- JavaScript -->
+  <script src="{{ "js/section-transition.js" | relURL }}?v={{ $sectionTransitionJsVersion }}"></script>
   
   {{ block "scripts" . }}{{ end }}
 </body>
