@@ -4,9 +4,6 @@ title = 'Limonium'
 defaultContentLanguage = 'it'
 defaultContentLanguageInSubdir = false
 
-# Hugo configuration
-theme = ''
-
 # Build settings
 buildDrafts = false
 buildFuture = false
