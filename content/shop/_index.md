@@ -1,4 +1,21 @@
 ---
 title: "Shop"
 description: "Acquista i prodotti di Limonium Flower Farm."
+ui:
+  cart_button: "Carrello"
+  cart_title: "Il tuo carrello"
+  close_cart: "Chiudi carrello"
+  cart_empty: "Il carrello e' vuoto."
+  total_label: "Totale"
+  checkout_button: "Vai al checkout"
+  loading_products: "Caricamento prodotti..."
+  no_products: "Nessun prodotto disponibile al momento."
+  load_error: "Impossibile caricare i prodotti ora. Riprova tra poco."
+  shop_unconfigured: "Shop non ancora configurato. Aggiungi SHOPIFY_STORE_DOMAIN e SHOPIFY_STOREFRONT_ACCESS_TOKEN alle variabili ambiente."
+  buy_now: "Acquista ora"
+  add_to_cart: "Aggiungi al carrello"
+  unavailable: "Non disponibile"
+  remove: "Rimuovi"
+  empty_category: "Senza categoria"
+  unavailable_cart_error: "Prodotto non disponibile per la vendita."
 ---

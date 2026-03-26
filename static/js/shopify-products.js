@@ -11,17 +11,32 @@
       return value.trim();
     })
     .filter(Boolean);
+  const ui = {
+    emptyCategory: container.dataset.emptyCategory || "Senza categoria",
+    noProducts: container.dataset.noProducts || "Nessun prodotto disponibile al momento.",
+    loadError: container.dataset.loadError || "Impossibile caricare i prodotti ora. Riprova tra poco.",
+    shopUnconfigured:
+      container.dataset.shopUnconfigured ||
+      "Shop non ancora configurato. Aggiungi SHOPIFY_STORE_DOMAIN e SHOPIFY_STOREFRONT_ACCESS_TOKEN alle variabili ambiente.",
+    buyNow: container.dataset.buyNow || "Acquista ora",
+    addToCart: container.dataset.addToCart || "Aggiungi al carrello",
+    unavailable: container.dataset.unavailable || "Non disponibile",
+  };
 
   if (!shopDomain || !storefrontToken) {
     container.innerHTML =
-      '<p class="shop-message shop-message--error text-off-white">Shop non ancora configurato. Aggiungi SHOPIFY_STORE_DOMAIN e SHOPIFY_STOREFRONT_ACCESS_TOKEN alle variabili ambiente.</p>';
+      '<p class="shop-message shop-message--error text-off-white">' + escapeHtml(ui.shopUnconfigured) + "</p>";
     return;
   }
 
   const endpoint = `https://${shopDomain}/api/${apiVersion}/graphql.json`;
+  const preferredLang = getPreferredLanguage();
+  const languageCode = preferredLang === "en" ? "EN" : "IT";
+  const countryCode = preferredLang === "en" ? "US" : "IT";
+  const moneyLocale = preferredLang === "en" ? "en-US" : "it-IT";
 
   const query = `
-    query GetProducts($first: Int!) {
+    query GetProducts($first: Int!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
       products(first: $first, sortKey: CREATED_AT, reverse: true) {
         edges {
           node {
@@ -64,7 +79,7 @@
     },
     body: JSON.stringify({
       query: query,
-      variables: { first: 12 },
+      variables: { first: 12, language: languageCode, country: countryCode },
     }),
   })
     .then(function (response) {
@@ -88,7 +103,7 @@
 
       if (!edges.length) {
         container.innerHTML =
-          '<p class="shop-message text-off-white">Nessun prodotto disponibile al momento.</p>';
+          '<p class="shop-message text-off-white">' + escapeHtml(ui.noProducts) + "</p>";
         return;
       }
 
@@ -122,7 +137,7 @@
     .catch(function (error) {
       console.error("Shopify product loading error:", error);
       container.innerHTML =
-        '<p class="shop-message shop-message--error text-off-white">Impossibile caricare i prodotti ora. Riprova tra poco.</p>';
+        '<p class="shop-message shop-message--error text-off-white">' + escapeHtml(ui.loadError) + "</p>";
     });
 
   function escapeHtml(value) {
@@ -160,7 +175,7 @@
         return !matchedPriority.includes(name);
       })
       .sort(function (a, b) {
-        return a.localeCompare(b, "it");
+        return a.localeCompare(b, moneyLocale);
       });
 
     return matchedPriority.concat(remaining);
@@ -174,10 +189,10 @@
       return tag.toLowerCase().startsWith("categoria:");
     });
     if (categoryTag) {
-      return categoryTag.slice("categoria:".length).trim() || "Senza categoria";
+      return categoryTag.slice("categoria:".length).trim() || ui.emptyCategory;
     }
 
-    return "Senza categoria";
+    return ui.emptyCategory;
   }
 
   function renderProductCard(product, domain) {
@@ -185,7 +200,7 @@
     const imageAlt = (product.featuredImage && product.featuredImage.altText) || product.title;
     const amount = Number(product.priceRange.minVariantPrice.amount);
     const currency = product.priceRange.minVariantPrice.currencyCode;
-    const formattedPrice = new Intl.NumberFormat("it-IT", {
+    const formattedPrice = new Intl.NumberFormat(moneyLocale, {
       style: "currency",
       currency: currency,
     }).format(amount);
@@ -218,16 +233,16 @@
             ${
               isAvailable
                 ? `<div class="shop-card__actions">
-                    <a class="shop-card__link" href="${productUrl}" target="_blank" rel="noopener">Acquista ora</a>
+                    <a class="shop-card__link" href="${productUrl}" target="_blank" rel="noopener">${escapeHtml(ui.buyNow)}</a>
                     <button
                       class="shop-card__cart-button"
                       type="button"
                       data-variant-id="${escapeHtml(firstVariantId)}"
                     >
-                      Aggiungi al carrello
+                      ${escapeHtml(ui.addToCart)}
                     </button>
                   </div>`
-                : '<span class="shop-card__availability">Non disponibile</span>'
+                : '<span class="shop-card__availability">' + escapeHtml(ui.unavailable) + "</span>"
             }
           </div>
         </div>
@@ -267,5 +282,23 @@
 
     if (availableEdge && availableEdge.node) return availableEdge.node;
     return edges[0] && edges[0].node ? edges[0].node : null;
+  }
+
+  function getPreferredLanguage() {
+    const normalize = function (value) {
+      const v = String(value || "").toLowerCase();
+      return v.startsWith("en") ? "en" : "it";
+    };
+
+    const bodyLang = document.body && document.body.dataset ? document.body.dataset.lang : "";
+    if (bodyLang) return normalize(bodyLang);
+
+    const htmlLang = document.documentElement ? document.documentElement.lang : "";
+    if (htmlLang) return normalize(htmlLang);
+
+    const stored = window.localStorage.getItem("limonium-language");
+    if (stored) return normalize(stored);
+
+    return normalize(navigator.language || "it");
   }
 })();

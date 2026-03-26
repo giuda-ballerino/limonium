@@ -209,5 +209,71 @@ content:
                 label: Image
                 type: image
 
+  - name: shop_it
+    label: Shop (Italiano)
+    type: file
+    path: content/shop/_index.md
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: Titolo
+        type: string
+      - name: description
+        label: Descrizione
+        type: text
+      - name: ui
+        label: Testi interfaccia shop
+        type: object
+        fields:
+          - { name: cart_button, label: Pulsante carrello, type: string }
+          - { name: cart_title, label: Titolo carrello, type: string }
+          - { name: close_cart, label: Label chiusura carrello, type: string }
+          - { name: cart_empty, label: Carrello vuoto, type: string }
+          - { name: total_label, label: Etichetta totale, type: string }
+          - { name: checkout_button, label: Pulsante checkout, type: string }
+          - { name: loading_products, label: Caricamento prodotti, type: string }
+          - { name: no_products, label: Nessun prodotto, type: string }
+          - { name: load_error, label: Errore caricamento prodotti, type: string }
+          - { name: shop_unconfigured, label: Shop non configurato, type: string }
+          - { name: buy_now, label: Pulsante acquista ora, type: string }
+          - { name: add_to_cart, label: Pulsante aggiungi al carrello, type: string }
+          - { name: unavailable, label: Non disponibile, type: string }
+          - { name: remove, label: Pulsante rimuovi, type: string }
+          - { name: empty_category, label: Categoria vuota, type: string }
+          - { name: unavailable_cart_error, label: Errore prodotto non disponibile, type: string }
+
+  - name: shop_en
+    label: Shop (English)
+    type: file
+    path: content/shop/_index.en.md
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: Title
+        type: string
+      - name: description
+        label: Description
+        type: text
+      - name: ui
+        label: Shop UI texts
+        type: object
+        fields:
+          - { name: cart_button, label: Cart button, type: string }
+          - { name: cart_title, label: Cart title, type: string }
+          - { name: close_cart, label: Close cart label, type: string }
+          - { name: cart_empty, label: Empty cart, type: string }
+          - { name: total_label, label: Total label, type: string }
+          - { name: checkout_button, label: Checkout button, type: string }
+          - { name: loading_products, label: Loading products, type: string }
+          - { name: no_products, label: No products message, type: string }
+          - { name: load_error, label: Product load error, type: string }
+          - { name: shop_unconfigured, label: Shop unconfigured message, type: string }
+          - { name: buy_now, label: Buy now button, type: string }
+          - { name: add_to_cart, label: Add to cart button, type: string }
+          - { name: unavailable, label: Unavailable label, type: string }
+          - { name: remove, label: Remove button, type: string }
+          - { name: empty_category, label: Empty category, type: string }
+          - { name: unavailable_cart_error, label: Unavailable cart error, type: string }
+
 settings:
   hide: true

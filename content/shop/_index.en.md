@@ -1,4 +1,21 @@
 ---
 title: "Shop"
 description: "Buy products from Limonium Flower Farm."
+ui:
+  cart_button: "Cart"
+  cart_title: "Your cart"
+  close_cart: "Close cart"
+  cart_empty: "Your cart is empty."
+  total_label: "Total"
+  checkout_button: "Go to checkout"
+  loading_products: "Loading products..."
+  no_products: "No products available right now."
+  load_error: "Unable to load products right now. Please try again soon."
+  shop_unconfigured: "Shop not configured yet. Add SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_ACCESS_TOKEN to environment variables."
+  buy_now: "Buy now"
+  add_to_cart: "Add to cart"
+  unavailable: "Unavailable"
+  remove: "Remove"
+  empty_category: "Uncategorized"
+  unavailable_cart_error: "Product not available for sale."
 ---

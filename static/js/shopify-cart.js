@@ -7,6 +7,17 @@
   const storefrontToken = container.dataset.storefrontToken || "";
   const apiVersion = container.dataset.apiVersion || "2025-01";
   const endpoint = `https://${shopDomain}/api/${apiVersion}/graphql.json`;
+  const preferredLang = getPreferredLanguage();
+  const languageCode = preferredLang === "en" ? "EN" : "IT";
+  const countryCode = preferredLang === "en" ? "US" : "IT";
+  const moneyLocale = preferredLang === "en" ? "en-US" : "it-IT";
+  const ui = {
+    cartEmpty: container.dataset.cartEmpty || "Il carrello e' vuoto.",
+    totalLabel: container.dataset.totalLabel || "Totale",
+    removeLabel: container.dataset.removeLabel || "Rimuovi",
+    unavailableCartError:
+      container.dataset.unavailableCartError || "Prodotto non disponibile per la vendita.",
+  };
 
   let cart = null;
   let isLoading = false;
@@ -137,7 +148,7 @@
         if (!result || !result.cart) throw new Error("Unable to add line.");
         cart = result.cart;
         if (!hasPurchasableLines(cart)) {
-          throw new Error("Prodotto non disponibile per la vendita.");
+          throw new Error(ui.unavailableCartError);
         }
         render();
         openDrawer();
@@ -190,12 +201,12 @@
     if (refs.count) refs.count.textContent = String(itemCount);
     if (refs.checkout) refs.checkout.disabled = !cart || !cart.checkoutUrl || lines.length === 0;
     if (refs.total) {
-      refs.total.textContent = "Totale: " + formatMoney(getCartTotalAmount(lines));
+      refs.total.textContent = ui.totalLabel + ": " + formatMoney(getCartTotalAmount(lines));
     }
 
     if (!refs.items) return;
     if (!lines.length) {
-      refs.items.innerHTML = '<p class="shop-cart-empty">Il carrello e\' vuoto.</p>';
+      refs.items.innerHTML = '<p class="shop-cart-empty">' + escapeHtml(ui.cartEmpty) + "</p>";
       return;
     }
 
@@ -218,7 +229,7 @@
           '<button type="button" data-action="dec" data-line-id="' + line.id + '">-</button>' +
           '<span>' + line.quantity + "</span>" +
           '<button type="button" data-action="inc" data-line-id="' + line.id + '">+</button>' +
-          '<button type="button" data-action="remove" data-line-id="' + line.id + '">Rimuovi</button>' +
+          '<button type="button" data-action="remove" data-line-id="' + line.id + '">' + escapeHtml(ui.removeLabel) + "</button>" +
           "</div>" +
           "</div>"
         );
@@ -286,20 +297,20 @@
   function getCartQuery(cartId) {
     return {
       query: `
-        query GetCart($id: ID!) {
+        query GetCart($id: ID!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
           cart(id: $id) {
             ${cartSelectionSet()}
           }
         }
       `,
-      variables: { id: cartId },
+      variables: { id: cartId, language: languageCode, country: countryCode },
     };
   }
 
   function createCartMutation() {
     return {
       query: `
-        mutation CartCreate {
+        mutation CartCreate($language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
           cartCreate {
             cart {
               ${cartSelectionSet()}
@@ -311,14 +322,14 @@
           }
         }
       `,
-      variables: {},
+      variables: { language: languageCode, country: countryCode },
     };
   }
 
   function addLineMutation(cartId, merchandiseId, quantity) {
     return {
       query: `
-        mutation AddLine($cartId: ID!, $lines: [CartLineInput!]!) {
+        mutation AddLine($cartId: ID!, $lines: [CartLineInput!]!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
           cartLinesAdd(cartId: $cartId, lines: $lines) {
             cart {
               ${cartSelectionSet()}
@@ -333,6 +344,8 @@
       variables: {
         cartId: cartId,
         lines: [{ merchandiseId: merchandiseId, quantity: quantity }],
+        language: languageCode,
+        country: countryCode,
       },
     };
   }
@@ -340,7 +353,7 @@
   function updateLineMutation(cartId, lineId, quantity) {
     return {
       query: `
-        mutation UpdateLine($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+        mutation UpdateLine($cartId: ID!, $lines: [CartLineUpdateInput!]!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
           cartLinesUpdate(cartId: $cartId, lines: $lines) {
             cart {
               ${cartSelectionSet()}
@@ -355,6 +368,8 @@
       variables: {
         cartId: cartId,
         lines: [{ id: lineId, quantity: quantity }],
+        language: languageCode,
+        country: countryCode,
       },
     };
   }
@@ -362,7 +377,7 @@
   function removeLineMutation(cartId, lineId) {
     return {
       query: `
-        mutation RemoveLine($cartId: ID!, $lineIds: [ID!]!) {
+        mutation RemoveLine($cartId: ID!, $lineIds: [ID!]!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
           cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
             cart {
               ${cartSelectionSet()}
@@ -377,6 +392,8 @@
       variables: {
         cartId: cartId,
         lineIds: [lineId],
+        language: languageCode,
+        country: countryCode,
       },
     };
   }
@@ -385,7 +402,7 @@
     if (!amountObj) return "EUR 0,00";
     const amount = Number(amountObj.amount || 0);
     const currency = amountObj.currencyCode || "EUR";
-    return new Intl.NumberFormat("it-IT", {
+    return new Intl.NumberFormat(moneyLocale, {
       style: "currency",
       currency: currency,
     }).format(amount);
@@ -432,5 +449,23 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  }
+
+  function getPreferredLanguage() {
+    const normalize = function (value) {
+      const v = String(value || "").toLowerCase();
+      return v.startsWith("en") ? "en" : "it";
+    };
+
+    const bodyLang = document.body && document.body.dataset ? document.body.dataset.lang : "";
+    if (bodyLang) return normalize(bodyLang);
+
+    const htmlLang = document.documentElement ? document.documentElement.lang : "";
+    if (htmlLang) return normalize(htmlLang);
+
+    const stored = window.localStorage.getItem("limonium-language");
+    if (stored) return normalize(stored);
+
+    return normalize(navigator.language || "it");
   }
 })();
