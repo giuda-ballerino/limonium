@@ -1,6 +1,8 @@
 baseURL = 'https://example.org/'
-languageCode = 'en-us'
+languageCode = 'it-IT'
 title = 'Limonium'
+defaultContentLanguage = 'it'
+defaultContentLanguageInSubdir = false
 
 # Hugo configuration
 theme = ''
@@ -24,4 +26,15 @@ buildExpired = false
 [security]
   [security.funcs]
     getenv = ['^HUGO_', '^CI$', '^SHOPIFY_STORE_DOMAIN$', '^SHOPIFY_STOREFRONT_ACCESS_TOKEN$', '^SHOPIFY_API_VERSION$']
+
+[languages]
+  [languages.it]
+    languageName = 'Italiano'
+    languageCode = 'it-IT'
+    weight = 1
+
+  [languages.en]
+    languageName = 'English'
+    languageCode = 'en-US'
+    weight = 2
 

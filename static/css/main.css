@@ -149,6 +149,48 @@ main > .section:first-child {
 .site-nav {
   display: flex;
   align-items: center;
+  gap: 0.55rem;
+}
+
+.site-lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(10, 10, 10, 0.22);
+  background: rgba(255, 235, 235, 0.45);
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.site-lang-switch__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.1rem;
+  height: 1.9rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-off-black);
+  opacity: 0.8;
+}
+
+.site-lang-switch__link.is-active {
+  background: var(--color-lavender);
+  color: var(--color-off-white);
+  opacity: 1;
+}
+
+.site-lang-switch__link:hover {
+  opacity: 1;
+}
+
+.is-home:not(.home-logo-out) .site-lang-switch {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
 }
 
 /* Typography */
@@ -804,6 +846,16 @@ a:hover {
   .site-nav__cta {
     padding: 0.6rem 1.2rem;
     font-size: 0.78rem;
+  }
+
+  .site-lang-switch {
+    padding: 0.16rem;
+  }
+
+  .site-lang-switch__link {
+    min-width: 1.9rem;
+    height: 1.7rem;
+    font-size: 0.66rem;
   }
   
   .section {

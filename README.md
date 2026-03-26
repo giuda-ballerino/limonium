@@ -1,12 +1,13 @@
 # Limonium
 
-A Hugo static site with Decap CMS integration.
+A Hugo static site with Pages CMS integration.
 
 ## Setup
 
 This project uses:
 - **Hugo** (v0.154.5+) - Static site generator
-- **Decap CMS** (v3.0.0+) - Git-based CMS
+- **Pages CMS** - GitHub-native CMS
+- **Cloudflare Pages** - Hosting
 
 ## Getting Started
 
@@ -31,7 +32,7 @@ hugo server --buildDrafts
 
 **Access your site:**
 - Main site: http://localhost:1313
-- CMS Admin: http://localhost:1313/admin/
+- CMS entry page: http://localhost:1313/admin/ (links to Pages CMS)
 
 ### Adding a Theme
 
@@ -51,36 +52,28 @@ echo 'theme = "theme-name"' >> hugo.toml
 
 Browse themes at: https://themes.gohugo.io/
 
-## Decap CMS Configuration
+## Pages CMS Configuration
 
-The CMS is configured in `static/admin/config.yml`. Currently set up for:
-- **Backend**: Git Gateway (requires Netlify or similar hosting)
-- **Collections**: Blog posts in `content/blog/`
+Pages CMS is configured in `.pages.yml` at the repository root.
 
-### To Use Decap CMS in Production
+Managed content currently includes localized homepage files:
+- `content/_index.it.md`
+- `content/_index.en.md`
 
-1. **Deploy to Netlify:**
-   - Connect your Git repository
-   - Build command: `hugo`
-   - Publish directory: `public`
+### Using Pages CMS
 
-2. **Enable Netlify Identity & Git Gateway:**
-   - Go to Site Settings → Identity
-   - Enable Identity service
-   - Enable Git Gateway under Services
+1. Go to [Pages CMS app](https://app.pagescms.org).
+2. Sign in with GitHub.
+3. Select this repository and the branch you want to edit.
+4. Edit content from the configured entries and commit changes.
 
-3. **Access CMS:**
-   - Navigate to `https://your-site.netlify.app/admin/`
-   - Log in with Netlify Identity
+### Cloudflare Pages deployment
 
-### Alternative Backends
+Cloudflare Pages hosts the Hugo site build, while Pages CMS writes content directly to GitHub.
 
-For local development or other backends, update `static/admin/config.yml`:
-- **Local backend**: `name: local_backend` (for testing without Git)
-- **GitHub backend**: `name: github` (requires OAuth app)
-- **GitLab backend**: `name: gitlab` (requires OAuth app)
-
-See [Decap CMS documentation](https://decapcms.org/docs/backends-overview/) for more options.
+Recommended Cloudflare Pages build settings:
+- Build command: `hugo`
+- Build output directory: `public`
 
 ## Project Structure
 
@@ -89,13 +82,16 @@ limonium/
 ├── archetypes/      # Content templates
 ├── assets/          # Assets to be processed by Hugo
 ├── content/         # Site content
-│   └── blog/       # Blog posts
+│   ├── _index.it.md  # Homepage content (Italian)
+│   ├── _index.en.md  # Homepage content (English)
+│   └── shop/         # Shop page content
 ├── data/            # Data files
 ├── layouts/         # Custom layouts
 ├── static/          # Static files (CSS, JS, images)
-│   ├── admin/      # Decap CMS files
+│   ├── admin/      # CMS entry page
 │   └── images/     # Uploaded media
 ├── themes/          # Hugo themes
+├── .pages.yml       # Pages CMS configuration
 └── hugo.toml        # Hugo configuration
 ```
 
@@ -115,7 +111,7 @@ hugo --minify
 ## Resources
 
 - [Hugo Documentation](https://gohugo.io/documentation/)
-- [Decap CMS Documentation](https://decapcms.org/docs/)
+- [Pages CMS Documentation](https://pagescms.org/docs/)
 - [Hugo Themes](https://themes.gohugo.io/)
 
 ## Shopify integration

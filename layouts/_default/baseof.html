@@ -9,6 +9,7 @@
   {{ $mainCssVersion := md5 (readFile "static/css/main.css") }}
   {{ $sectionTransitionJsVersion := md5 (readFile "static/js/section-transition.js") }}
   {{ $navbarJsVersion := md5 (readFile "static/js/navbar.js") }}
+  {{ $languageSwitchJsVersion := md5 (readFile "static/js/language-switch.js") }}
   
   <!-- CSS -->
   <link rel="stylesheet" href="{{ "css/reset.css" | relURL }}?v={{ $resetCssVersion }}">
@@ -16,21 +17,62 @@
   
   {{ block "head" . }}{{ end }}
 </head>
-<body class="{{ if .IsHome }}is-home{{ else }}is-inner{{ end }}">
+{{ $itURL := "" }}
+{{ $enURL := "" }}
+{{ if eq .Lang "it" }}{{ $itURL = .RelPermalink }}{{ end }}
+{{ if eq .Lang "en" }}{{ $enURL = .RelPermalink }}{{ end }}
+{{ range .AllTranslations }}
+  {{ if eq .Lang "it" }}{{ $itURL = .RelPermalink }}{{ end }}
+  {{ if eq .Lang "en" }}{{ $enURL = .RelPermalink }}{{ end }}
+{{ end }}
+<body
+  class="{{ if .IsHome }}is-home{{ else }}is-inner{{ end }}"
+  data-lang="{{ .Lang }}"
+  data-lang-it-url="{{ $itURL }}"
+  data-lang-en-url="{{ $enURL }}"
+>
   {{ block "header" . }}
+    {{ $navItURL := "" }}
+    {{ $navEnURL := "" }}
+    {{ if eq .Lang "it" }}{{ $navItURL = .RelPermalink }}{{ end }}
+    {{ if eq .Lang "en" }}{{ $navEnURL = .RelPermalink }}{{ end }}
+    {{ range .AllTranslations }}
+      {{ if eq .Lang "it" }}{{ $navItURL = .RelPermalink }}{{ end }}
+      {{ if eq .Lang "en" }}{{ $navEnURL = .RelPermalink }}{{ end }}
+    {{ end }}
     <header class="site-header">
       <div class="container">
         <div class="site-header__content">
-          <a class="site-header__logo" href="/" aria-label="Limonium home">
+          <a class="site-header__logo" href="{{ "/" | relLangURL }}" aria-label="Limonium home">
             <img src="{{ "images/logo.svg" | relURL }}" alt="Limonium" />
           </a>
           <nav class="site-nav" aria-label="Primary">
+            <div class="site-lang-switch" aria-label="Language switch">
+              <a
+                class="site-lang-switch__link{{ if eq .Lang "it" }} is-active{{ end }}"
+                href="{{ if $navItURL }}{{ $navItURL }}{{ else }}{{ "/" | relLangURL }}{{ end }}"
+                data-lang-switch="it"
+                hreflang="it"
+                lang="it"
+              >
+                IT
+              </a>
+              <a
+                class="site-lang-switch__link{{ if eq .Lang "en" }} is-active{{ end }}"
+                href="{{ if $navEnURL }}{{ $navEnURL }}{{ else }}/en/{{ end }}"
+                data-lang-switch="en"
+                hreflang="en"
+                lang="en"
+              >
+                EN
+              </a>
+            </div>
             <a
               class="cta-button site-nav__cta"
-              href="/shop"
+              href="{{ "shop" | relLangURL }}"
               style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;"
             >
-              acquista
+              {{ if eq .Lang "en" }}shop now{{ else }}acquista{{ end }}
             </a>
           </nav>
         </div>
@@ -46,6 +88,7 @@
   
   <!-- JavaScript -->
   <script src="{{ "js/section-transition.js" | relURL }}?v={{ $sectionTransitionJsVersion }}"></script>
+  <script src="{{ "js/language-switch.js" | relURL }}?v={{ $languageSwitchJsVersion }}"></script>
   <script src="{{ "js/navbar.js" | relURL }}?v={{ $navbarJsVersion }}"></script>
   
   {{ block "scripts" . }}{{ end }}

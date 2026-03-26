@@ -1,0 +1,213 @@
+media:
+  input: static/images/uploads
+  output: /images/uploads
+
+content:
+  - name: home_it
+    label: Home (Italiano)
+    type: file
+    path: content/_index.it.md
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: Titolo
+        type: string
+      - name: description
+        label: Descrizione SEO
+        type: text
+      - name: hero
+        label: Hero
+        type: object
+        fields:
+          - name: subtitle
+            label: Sottotitolo
+            type: text
+          - name: left_image
+            label: Immagine sinistra
+            type: image
+          - name: left_image_alt
+            label: Alt immagine sinistra
+            type: string
+          - name: right_image
+            label: Immagine destra
+            type: image
+          - name: right_image_alt
+            label: Alt immagine destra
+            type: string
+      - name: mission
+        label: Mission
+        type: object
+        fields:
+          - name: heading
+            label: Titolo sezione
+            type: string
+          - name: icon
+            label: Icona
+            type: image
+          - name: icon_alt
+            label: Alt icona
+            type: string
+          - name: intro
+            label: Testo introduttivo
+            type: text
+          - name: outro
+            label: Testo finale
+            type: text
+          - name: spacer_image
+            label: Immagine separatore
+            type: image
+          - name: photos
+            label: Foto mission
+            type: object
+            list:
+              min: 3
+              max: 3
+            fields:
+              - name: image
+                label: Immagine
+                type: image
+              - name: alt
+                label: Alt
+                type: string
+      - name: products
+        label: Prodotti
+        type: object
+        fields:
+          - name: heading
+            label: Titolo sezione
+            type: string
+          - name: corner_image
+            label: Immagine decorativa
+            type: image
+          - name: paragraph_one
+            label: Paragrafo 1
+            type: text
+          - name: paragraph_two
+            label: Paragrafo 2
+            type: text
+          - name: cta_label
+            label: Testo CTA
+            type: string
+      - name: regenerative
+        label: Sezione finale
+        type: object
+        fields:
+          - name: title
+            label: Titolo
+            type: string
+          - name: images
+            label: Galleria immagini
+            type: object
+            list:
+              min: 6
+              max: 6
+            fields:
+              - name: image
+                label: Immagine
+                type: image
+
+  - name: home_en
+    label: Home (English)
+    type: file
+    path: content/_index.en.md
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: Title
+        type: string
+      - name: description
+        label: SEO description
+        type: text
+      - name: hero
+        label: Hero
+        type: object
+        fields:
+          - name: subtitle
+            label: Subtitle
+            type: text
+          - name: left_image
+            label: Left image
+            type: image
+          - name: left_image_alt
+            label: Left image alt
+            type: string
+          - name: right_image
+            label: Right image
+            type: image
+          - name: right_image_alt
+            label: Right image alt
+            type: string
+      - name: mission
+        label: Mission
+        type: object
+        fields:
+          - name: heading
+            label: Section title
+            type: string
+          - name: icon
+            label: Icon
+            type: image
+          - name: icon_alt
+            label: Icon alt
+            type: string
+          - name: intro
+            label: Intro text
+            type: text
+          - name: outro
+            label: Outro text
+            type: text
+          - name: spacer_image
+            label: Spacer image
+            type: image
+          - name: photos
+            label: Mission photos
+            type: object
+            list:
+              min: 3
+              max: 3
+            fields:
+              - name: image
+                label: Image
+                type: image
+              - name: alt
+                label: Alt
+                type: string
+      - name: products
+        label: Products
+        type: object
+        fields:
+          - name: heading
+            label: Section title
+            type: string
+          - name: corner_image
+            label: Decorative image
+            type: image
+          - name: paragraph_one
+            label: Paragraph 1
+            type: text
+          - name: paragraph_two
+            label: Paragraph 2
+            type: text
+          - name: cta_label
+            label: CTA text
+            type: string
+      - name: regenerative
+        label: Final section
+        type: object
+        fields:
+          - name: title
+            label: Title
+            type: string
+          - name: images
+            label: Gallery images
+            type: object
+            list:
+              min: 6
+              max: 6
+            fields:
+              - name: image
+                label: Image
+                type: image
+
+settings:
+  hide: true
