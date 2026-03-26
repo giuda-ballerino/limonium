@@ -878,6 +878,7 @@ a:hover {
   max-width: 780px;
   margin: 0 auto var(--spacing-lg);
   text-align: center;
+  line-height: 1.7;
 }
 
 .shop-groups {

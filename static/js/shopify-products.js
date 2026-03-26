@@ -61,6 +61,10 @@
                   id
                   title
                   availableForSale
+                  price {
+                    amount
+                    currencyCode
+                  }
                   selectedOptions {
                     name
                     value
@@ -204,19 +208,20 @@
   function renderProductCard(product, domain, categoryName) {
     const imageUrl = product.featuredImage ? product.featuredImage.url : "";
     const imageAlt = (product.featuredImage && product.featuredImage.altText) || product.title;
-    const amount = Number(product.priceRange.minVariantPrice.amount);
-    const currency = product.priceRange.minVariantPrice.currencyCode;
-    const formattedPrice = new Intl.NumberFormat(moneyLocale, {
-      style: "currency",
-      currency: currency,
-    }).format(amount);
-    const detailUrl = `${productDetailBase}?handle=${encodeURIComponent(product.handle)}`;
-    const productUrl = detailUrl || product.onlineStoreUrl || `https://${domain}/products/${product.handle}`;
     const variantChoices = getVariantChoices(product);
     const selectedChoice = variantChoices.length
       ? getFirstAvailableChoice(variantChoices) || variantChoices[0]
       : null;
     const selectedVariant = variantChoices.length ? selectedChoice : getFirstPurchasableVariant(product);
+    const baseAmount = Number(product.priceRange.minVariantPrice.amount);
+    const baseCurrency = product.priceRange.minVariantPrice.currencyCode;
+    const selectedAmount =
+      selectedVariant && selectedVariant.price ? Number(selectedVariant.price.amount) : baseAmount;
+    const selectedCurrency =
+      selectedVariant && selectedVariant.price ? selectedVariant.price.currencyCode : baseCurrency;
+    const formattedPrice = formatPrice(selectedAmount, selectedCurrency);
+    const detailUrl = `${productDetailBase}?handle=${encodeURIComponent(product.handle)}`;
+    const productUrl = detailUrl || product.onlineStoreUrl || `https://${domain}/products/${product.handle}`;
     const firstVariantId = selectedVariant ? selectedVariant.id : "";
     const isAvailable = Boolean(selectedVariant && selectedVariant.availableForSale);
     const shortDescription = (product.description || "").slice(0, 130);
@@ -251,7 +256,9 @@
                       <select class="shop-card__variant-select" ${variantChoices.every(function (choice) { return !choice.availableForSale; }) ? "disabled" : ""}>
                         ${variantChoices
                           .map(function (choice) {
-                            return `<option value="${escapeHtml(choice.id)}" data-available="${choice.availableForSale ? "true" : "false"}" ${
+                            return `<option value="${escapeHtml(choice.id)}" data-available="${choice.availableForSale ? "true" : "false"}" data-price-amount="${escapeHtml(
+                              choice.price.amount
+                            )}" data-price-currency="${escapeHtml(choice.price.currencyCode)}" ${
                               selectedChoice && choice.id === selectedChoice.id ? "selected" : ""
                             }>${escapeHtml(choice.label)}${choice.availableForSale ? "" : " (" + escapeHtml(ui.unavailable) + ")"}</option>`;
                           })
@@ -331,11 +338,18 @@
     const selectedOption = select.options[select.selectedIndex];
     const card = select.closest(".shop-card");
     const button = card ? card.querySelector(".shop-card__cart-button") : null;
+    const priceEl = card ? card.querySelector(".shop-card__price") : null;
     if (!button || !selectedOption) return;
 
     button.dataset.variantId = selectedOption.value || "";
     const isAvailable = selectedOption.dataset.available !== "false";
     button.disabled = !isAvailable;
+
+    if (priceEl) {
+      const amount = Number(selectedOption.dataset.priceAmount || 0);
+      const currency = selectedOption.dataset.priceCurrency || "EUR";
+      priceEl.textContent = formatPrice(amount, currency);
+    }
   });
 
   function getFirstPurchasableVariant(product) {
@@ -362,10 +376,15 @@
     if (variants.length === 1 && isDefaultVariant(variants[0])) return [];
 
     return variants.map(function (variant) {
+      const price = variant && variant.price ? variant.price : { amount: "0", currencyCode: "EUR" };
       return {
         id: variant.id,
         availableForSale: Boolean(variant.availableForSale),
         label: getVariantLabel(variant),
+        price: {
+          amount: String(price.amount || "0"),
+          currencyCode: String(price.currencyCode || "EUR"),
+        },
       };
     });
   }
@@ -392,6 +411,13 @@
   function isDefaultVariant(variant) {
     const title = String((variant && variant.title) || "").trim().toLowerCase();
     return title === "default title" || title === "title";
+  }
+
+  function formatPrice(amount, currency) {
+    return new Intl.NumberFormat(moneyLocale, {
+      style: "currency",
+      currency: currency || "EUR",
+    }).format(Number.isFinite(amount) ? amount : 0);
   }
 
   function getPreferredLanguage() {
