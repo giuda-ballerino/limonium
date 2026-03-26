@@ -2,16 +2,16 @@
   {{ $shopDomain := getenv "SHOPIFY_STORE_DOMAIN" }}
   {{ $storefrontToken := getenv "SHOPIFY_STOREFRONT_ACCESS_TOKEN" }}
   {{ $apiVersion := getenv "SHOPIFY_API_VERSION" | default "2025-01" }}
-  {{ $ui := .Params.ui }}
-  {{ $emptyLabel := or $ui.empty_category (cond (eq .Lang "en") "Uncategorized" "Senza categoria") }}
-  {{ $loadingLabel := or $ui.loading_products (cond (eq .Lang "en") "Loading products..." "Caricamento prodotti...") }}
-  {{ $noProductsLabel := or $ui.no_products (cond (eq .Lang "en") "No products available right now." "Nessun prodotto disponibile al momento.") }}
+  {{ $shopPage := .Site.GetPage "section" "shop" }}
+  {{ $ui := cond $shopPage $shopPage.Params.ui dict }}
+  {{ $loadingLabel := or $ui.loading_products (cond (eq .Lang "en") "Loading product..." "Caricamento prodotto...") }}
+  {{ $notFoundLabel := or $ui.product_not_found (cond (eq .Lang "en") "Product not found." "Prodotto non trovato.") }}
   {{ $loadErrorLabel := or $ui.load_error (cond (eq .Lang "en") "Unable to load products right now. Please try again soon." "Impossibile caricare i prodotti ora. Riprova tra poco.") }}
   {{ $shopUnconfiguredLabel := or $ui.shop_unconfigured (cond (eq .Lang "en") "Shop not configured yet. Add SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_ACCESS_TOKEN to environment variables." "Shop non ancora configurato. Aggiungi SHOPIFY_STORE_DOMAIN e SHOPIFY_STOREFRONT_ACCESS_TOKEN alle variabili ambiente.") }}
-  {{ $buyNowLabel := or $ui.buy_now (cond (eq .Lang "en") "Buy now" "Acquista ora") }}
-  {{ $viewDetailsLabel := or $ui.view_details (cond (eq .Lang "en") "View details" "Vedi dettagli") }}
+  {{ $backToShopLabel := or $ui.back_to_shop (cond (eq .Lang "en") "Back to shop" "Torna allo shop") }}
   {{ $selectOptionsLabel := or $ui.select_options (cond (eq .Lang "en") "Select options" "Seleziona opzioni") }}
   {{ $quantityLabel := or $ui.quantity_label (cond (eq .Lang "en") "Quantity" "Quantita'") }}
+  {{ $buyNowLabel := or $ui.buy_now (cond (eq .Lang "en") "Buy now" "Acquista ora") }}
   {{ $addToCartLabel := or $ui.add_to_cart (cond (eq .Lang "en") "Add to cart" "Aggiungi al carrello") }}
   {{ $unavailableLabel := or $ui.unavailable (cond (eq .Lang "en") "Unavailable" "Non disponibile") }}
   {{ $cartTitle := or $ui.cart_title (cond (eq .Lang "en") "Your cart" "Il tuo carrello") }}
@@ -23,41 +23,34 @@
   {{ $removeLabel := or $ui.remove (cond (eq .Lang "en") "Remove" "Rimuovi") }}
   {{ $unavailableCartError := or $ui.unavailable_cart_error (cond (eq .Lang "en") "Product not available for sale." "Prodotto non disponibile per la vendita.") }}
 
-  <section class="section section--lavender shop">
+  <section class="section section--lavender shop shop-detail">
     <div class="section__transition" aria-hidden="true"></div>
     <div class="section__content">
       <div class="container">
-        <div class="text-center mb-md">
-          <span class="section-heading section-heading--squiggle section-heading--white section-heading--bg-coral">{{ .Title | default "shop" }}</span>
+        <div class="shop-detail__top">
+          <a class="shop-detail__back text-off-white" href="{{ "shop/" | relLangURL }}">{{ $backToShopLabel }}</a>
         </div>
 
-        <p class="shop__intro text-off-white">
-          {{ .Description | default "Scopri i nostri prodotti stagionali. La selezione qui sotto viene aggiornata automaticamente da Shopify." }}
-        </p>
-
         <div
-          id="shopify-products"
-          class="shop-groups"
+          id="shopify-product-detail"
+          class="shop-detail__container"
           data-shop-domain="{{ $shopDomain }}"
           data-storefront-token="{{ $storefrontToken }}"
           data-api-version="{{ $apiVersion }}"
-          data-priority-categories="Ortofrutta|Merchandising"
-          data-product-detail-base="{{ "shop/product/" | relLangURL }}"
-          data-empty-category="{{ $emptyLabel }}"
-          data-loading-products="{{ $loadingLabel }}"
-          data-no-products="{{ $noProductsLabel }}"
+          data-loading-product="{{ $loadingLabel }}"
+          data-product-not-found="{{ $notFoundLabel }}"
           data-load-error="{{ $loadErrorLabel }}"
           data-shop-unconfigured="{{ $shopUnconfiguredLabel }}"
-          data-buy-now="{{ $buyNowLabel }}"
-          data-view-details="{{ $viewDetailsLabel }}"
           data-select-options="{{ $selectOptionsLabel }}"
           data-quantity-label="{{ $quantityLabel }}"
+          data-buy-now="{{ $buyNowLabel }}"
           data-add-to-cart="{{ $addToCartLabel }}"
           data-unavailable="{{ $unavailableLabel }}"
           data-cart-empty="{{ $cartEmpty }}"
           data-total-label="{{ $totalLabel }}"
           data-remove-label="{{ $removeLabel }}"
           data-unavailable-cart-error="{{ $unavailableCartError }}"
+          data-back-to-shop-url="{{ "shop/" | relLangURL }}"
         >
           <p class="shop-message text-off-white">{{ $loadingLabel }}</p>
         </div>
@@ -82,9 +75,9 @@
 
 {{ define "scripts" }}
   {{ $shopCartJsVersion := md5 (readFile "static/js/shopify-cart.js") }}
-  {{ $shopJsVersion := md5 (readFile "static/js/shopify-products.js") }}
+  {{ $shopDetailJsVersion := md5 (readFile "static/js/shopify-product-detail.js") }}
   <script src="{{ "js/shopify-cart.js" | relURL }}?v={{ $shopCartJsVersion }}"></script>
-  <script src="{{ "js/shopify-products.js" | relURL }}?v={{ $shopJsVersion }}"></script>
+  <script src="{{ "js/shopify-product-detail.js" | relURL }}?v={{ $shopDetailJsVersion }}"></script>
 {{ end }}
 
 {{ define "footer" }}

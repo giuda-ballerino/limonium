@@ -32,6 +32,12 @@
   data-lang-en-url="{{ $enURL }}"
 >
   {{ block "header" . }}
+    {{ $cartButtonLabel := cond (eq .Lang "en") "Cart" "Carrello" }}
+    {{ with .Site.GetPage "section" "shop" }}
+      {{ with .Params.ui.cart_button }}
+        {{ $cartButtonLabel = . }}
+      {{ end }}
+    {{ end }}
     {{ $navItURL := "" }}
     {{ $navEnURL := "" }}
     {{ if eq .Lang "it" }}{{ $navItURL = .RelPermalink }}{{ end }}
@@ -67,13 +73,24 @@
                 EN
               </a>
             </div>
-            <a
-              class="cta-button site-nav__cta"
-              href="{{ "shop" | relLangURL }}"
-              style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;"
-            >
-              {{ if eq .Lang "en" }}shop now{{ else }}acquista{{ end }}
-            </a>
+            {{ if eq .Section "shop" }}
+              <button
+                id="site-nav-cart-toggle"
+                class="cta-button site-nav__cta"
+                type="button"
+                style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;"
+              >
+                {{ $cartButtonLabel }}
+              </button>
+            {{ else }}
+              <a
+                class="cta-button site-nav__cta"
+                href="{{ "shop" | relLangURL }}"
+                style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;"
+              >
+                {{ if eq .Lang "en" }}shop now{{ else }}acquista{{ end }}
+              </a>
+            {{ end }}
           </nav>
         </div>
       </div>

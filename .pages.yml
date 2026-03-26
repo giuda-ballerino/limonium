@@ -235,12 +235,17 @@ content:
           - { name: no_products, label: Nessun prodotto, type: string }
           - { name: load_error, label: Errore caricamento prodotti, type: string }
           - { name: shop_unconfigured, label: Shop non configurato, type: string }
+          - { name: view_details, label: Pulsante vedi dettagli, type: string }
           - { name: buy_now, label: Pulsante acquista ora, type: string }
           - { name: add_to_cart, label: Pulsante aggiungi al carrello, type: string }
           - { name: unavailable, label: Non disponibile, type: string }
           - { name: remove, label: Pulsante rimuovi, type: string }
           - { name: empty_category, label: Categoria vuota, type: string }
           - { name: unavailable_cart_error, label: Errore prodotto non disponibile, type: string }
+          - { name: back_to_shop, label: Link torna allo shop, type: string }
+          - { name: product_not_found, label: Prodotto non trovato, type: string }
+          - { name: select_options, label: Etichetta selezione opzioni, type: string }
+          - { name: quantity_label, label: Etichetta quantita', type: string }
 
   - name: shop_en
     label: Shop (English)
@@ -268,12 +273,17 @@ content:
           - { name: no_products, label: No products message, type: string }
           - { name: load_error, label: Product load error, type: string }
           - { name: shop_unconfigured, label: Shop unconfigured message, type: string }
+          - { name: view_details, label: View details button, type: string }
           - { name: buy_now, label: Buy now button, type: string }
           - { name: add_to_cart, label: Add to cart button, type: string }
           - { name: unavailable, label: Unavailable label, type: string }
           - { name: remove, label: Remove button, type: string }
           - { name: empty_category, label: Empty category, type: string }
           - { name: unavailable_cart_error, label: Unavailable cart error, type: string }
+          - { name: back_to_shop, label: Back to shop link, type: string }
+          - { name: product_not_found, label: Product not found message, type: string }
+          - { name: select_options, label: Select options label, type: string }
+          - { name: quantity_label, label: Quantity label, type: string }
 
 settings:
   hide: true

@@ -19,6 +19,21 @@
     }
   };
 
+  const withCurrentContext = (url) => {
+    try {
+      const next = new URL(url, window.location.origin);
+      if (!next.search && window.location.search) {
+        next.search = window.location.search;
+      }
+      if (!next.hash && window.location.hash) {
+        next.hash = window.location.hash;
+      }
+      return next.toString();
+    } catch (_) {
+      return url;
+    }
+  };
+
   const saveScrollForTarget = (targetUrl) => {
     const doc = document.documentElement;
     const maxScroll = Math.max(1, doc.scrollHeight - window.innerHeight);
@@ -79,11 +94,14 @@
   restoreScrollIfNeeded();
 
   document.querySelectorAll("[data-lang-switch]").forEach((link) => {
-    link.addEventListener("click", () => {
+    link.addEventListener("click", (event) => {
       const chosen = link.dataset.langSwitch;
       if (supported.includes(chosen)) {
+        const target = withCurrentContext(link.href);
         localStorage.setItem(STORAGE_KEY, chosen);
-        saveScrollForTarget(link.href);
+        saveScrollForTarget(target);
+        event.preventDefault();
+        window.location.assign(target);
       }
     });
   });
@@ -93,8 +111,9 @@
   const preferred = supported.includes(stored) ? stored : browserLang;
 
   if (preferred !== currentLang && urls[preferred]) {
+    const target = withCurrentContext(urls[preferred]);
     localStorage.setItem(STORAGE_KEY, preferred);
-    saveScrollForTarget(urls[preferred]);
-    window.location.replace(urls[preferred]);
+    saveScrollForTarget(target);
+    window.location.replace(target);
   }
 })();

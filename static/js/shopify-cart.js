@@ -1,6 +1,8 @@
 (function () {
   const STORAGE_KEY = "limonium_shopify_cart_id";
-  const container = document.getElementById("shopify-products");
+  const container =
+    document.getElementById("shopify-products") ||
+    document.getElementById("shopify-product-detail");
   if (!container) return;
 
   const shopDomain = container.dataset.shopDomain || "";
@@ -23,7 +25,7 @@
   let isLoading = false;
 
   const refs = {
-    toggle: document.getElementById("shop-cart-toggle"),
+    toggle: document.getElementById("shop-cart-toggle") || document.getElementById("site-nav-cart-toggle"),
     close: document.getElementById("shop-cart-close"),
     drawer: document.getElementById("shop-cart-drawer"),
     count: document.getElementById("shop-cart-count"),
@@ -35,6 +37,7 @@
   window.ShopifyCart = {
     init: init,
     addLine: addLine,
+    buyNowLine: buyNowLine,
     open: openDrawer,
     refresh: loadCart,
   };
@@ -43,8 +46,16 @@
 
   function init() {
     if (!shopDomain || !storefrontToken) return;
+    mountDrawerToBody();
     bindEvents();
     loadCart();
+  }
+
+  function mountDrawerToBody() {
+    if (!refs.drawer) return;
+    if (refs.drawer.parentElement !== document.body) {
+      document.body.appendChild(refs.drawer);
+    }
   }
 
   function bindEvents() {
@@ -156,6 +167,14 @@
       .finally(function () {
         isLoading = false;
       });
+  }
+
+  function buyNowLine(merchandiseId, quantity) {
+    return addLine(merchandiseId, quantity).then(function () {
+      if (cart && cart.checkoutUrl) {
+        window.location.href = cart.checkoutUrl;
+      }
+    });
   }
 
   function updateLine(lineId, quantity) {
