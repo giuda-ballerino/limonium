@@ -12,6 +12,8 @@
   {{ $sectionTransitionJsVersion := md5 (readFile "static/js/section-transition.js") }}
   {{ $navbarJsVersion := md5 (readFile "static/js/navbar.js") }}
   {{ $languageSwitchJsVersion := md5 (readFile "static/js/language-switch.js") }}
+  {{ $navDrawerJsVersion := md5 (readFile "static/js/nav-drawer.js") }}
+  {{ $shopCartJsVersion := md5 (readFile "static/js/shopify-cart.js") }}
   {{ $footerYearJsVersion := md5 (readFile "static/js/footer-year.js") }}
   
   <!-- CSS -->
@@ -35,14 +37,32 @@
   data-lang-en-url="{{ $enURL }}"
 >
   {{ block "header" . }}
+    {{ $shopDomain := getenv "SHOPIFY_STORE_DOMAIN" }}
+    {{ $storefrontToken := getenv "SHOPIFY_STOREFRONT_ACCESS_TOKEN" }}
+    {{ $apiVersion := getenv "SHOPIFY_API_VERSION" | default "2025-01" }}
+    {{ $shopPage := .Site.GetPage "section" "shop" }}
+    {{ $ui := cond $shopPage $shopPage.Params.ui dict }}
     {{ $cartButtonLabel := cond (eq .Lang "en") "Cart" "Carrello" }}
-    {{ with .Site.GetPage "section" "shop" }}
-      {{ with .Params.ui.cart_button }}
-        {{ $cartButtonLabel = . }}
-      {{ end }}
+    {{ with $ui.cart_button }}
+      {{ $cartButtonLabel = . }}
     {{ end }}
+    {{ $shopCtaLabel := cond (eq .Lang "en") "shop now" "acquista" }}
+    {{ with $ui.buy_now }}
+      {{ $shopCtaLabel = . }}
+    {{ end }}
+    {{ $cartTitle := or $ui.cart_title (cond (eq .Lang "en") "Your cart" "Il tuo carrello") }}
+    {{ $cartEmpty := or $ui.cart_empty (cond (eq .Lang "en") "Your cart is empty." "Il carrello e' vuoto.") }}
+    {{ $totalLabel := or $ui.total_label (cond (eq .Lang "en") "Total" "Totale") }}
+    {{ $checkoutLabel := or $ui.checkout_button (cond (eq .Lang "en") "Go to checkout" "Vai al checkout") }}
+    {{ $closeCartLabel := or $ui.close_cart (cond (eq .Lang "en") "Close cart" "Chiudi carrello") }}
+    {{ $removeLabel := or $ui.remove (cond (eq .Lang "en") "Remove" "Rimuovi") }}
+    {{ $unavailableCartError := or $ui.unavailable_cart_error (cond (eq .Lang "en") "Product not available for sale." "Prodotto non disponibile per la vendita.") }}
     {{ $navItURL := "" }}
     {{ $navEnURL := "" }}
+    {{ $homeURL := "/" | relLangURL }}
+    {{ $missionURL := printf "%s#mission" $homeURL }}
+    {{ $productsURL := printf "%s#products" $homeURL }}
+    {{ $regenerativeURL := printf "%s#regenerative" $homeURL }}
     {{ if eq .Lang "it" }}{{ $navItURL = .RelPermalink }}{{ end }}
     {{ if eq .Lang "en" }}{{ $navEnURL = .RelPermalink }}{{ end }}
     {{ range .AllTranslations }}
@@ -56,7 +76,98 @@
             <img src="{{ "images/logo.svg" | relURL }}" alt="Limonium" />
           </a>
           <nav class="site-nav" aria-label="Primary">
-            <div class="site-lang-switch" aria-label="Language switch">
+            {{ if eq .Section "shop" }}
+              <button
+                id="site-nav-cart-toggle"
+                class="cta-button site-nav__cta"
+                data-cart-toggle
+                type="button"
+                style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;"
+              >
+                {{ $cartButtonLabel }}
+              </button>
+            {{ else }}
+              <a
+                class="cta-button site-nav__cta"
+                href="{{ "shop" | relLangURL }}"
+                style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;"
+              >
+                {{ if eq .Lang "en" }}shop now{{ else }}acquista{{ end }}
+              </a>
+            {{ end }}
+            <button
+              id="site-nav-menu-toggle"
+              class="site-nav__menu-toggle"
+              type="button"
+              aria-controls="site-nav-drawer"
+              aria-expanded="false"
+              aria-label="{{ if eq .Lang "en" }}Open menu{{ else }}Apri menu{{ end }}"
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <div id="site-nav-drawer" class="site-nav-drawer" hidden>
+      <button
+        id="site-nav-drawer-overlay"
+        class="site-nav-drawer__overlay"
+        type="button"
+        aria-label="{{ if eq .Lang "en" }}Close menu{{ else }}Chiudi menu{{ end }}"
+      ></button>
+      <aside class="site-nav-drawer__panel" aria-label="{{ if eq .Lang "en" }}Navigation menu{{ else }}Menu di navigazione{{ end }}">
+        <div class="site-nav-drawer__header">
+          <p class="site-nav-drawer__title">{{ if eq .Lang "en" }}Menu{{ else }}Menu{{ end }}</p>
+          <button
+            id="site-nav-drawer-close"
+            class="site-nav-drawer__close"
+            type="button"
+            aria-label="{{ if eq .Lang "en" }}Close menu{{ else }}Chiudi menu{{ end }}"
+          >
+            x
+          </button>
+        </div>
+
+        <div class="site-nav-drawer__main">
+          <div class="site-nav-drawer__section site-nav-drawer__section--anchors">
+            <nav class="site-nav-drawer__links" aria-label="{{ if eq .Lang "en" }}Navigation links{{ else }}Link navigazione{{ end }}">
+              <a href="{{ $missionURL }}" data-drawer-close>{{ if eq .Lang "en" }}Mission{{ else }}Missione{{ end }}</a>
+              <a href="{{ $productsURL }}" data-drawer-close>{{ if eq .Lang "en" }}Products{{ else }}Prodotti{{ end }}</a>
+            </nav>
+          </div>
+
+          <div class="site-nav-drawer__section site-nav-drawer__section--cta">
+            <div class="site-nav-drawer__cta-stack">
+              <button
+                class="cta-button cta-button--secondary site-nav-drawer__cta"
+                data-cart-toggle
+                type="button"
+                style="--cta-secondary-text: #FFEBEB; --cta-secondary-border: #FFEBEB; --cta-secondary-hover-bg: #FFEBEB; --cta-secondary-hover-text: #52489C; --cta-secondary-hover-border: #FFEBEB;"
+              >
+                {{ $cartButtonLabel }}
+              </button>
+              {{ if .IsHome }}
+                <a
+                  class="cta-button site-nav-drawer__cta"
+                  href="{{ "shop" | relLangURL }}"
+                  data-drawer-close
+                  style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;"
+                >
+                  {{ $shopCtaLabel }}
+                </a>
+              {{ end }}
+            </div>
+          </div>
+        </div>
+
+        <div class="site-nav-drawer__section site-nav-drawer__section--language">
+          <div class="site-nav-drawer__language-row">
+            <p class="site-nav-drawer__label">{{ if eq .Lang "en" }}Language{{ else }}Lingua{{ end }}</p>
+            <div class="site-lang-switch site-lang-switch--drawer" aria-label="Language switch">
               <a
                 class="site-lang-switch__link{{ if eq .Lang "it" }} is-active{{ end }}"
                 href="{{ if $navItURL }}{{ $navItURL }}{{ else }}{{ "/" | relLangURL }}{{ end }}"
@@ -76,28 +187,34 @@
                 EN
               </a>
             </div>
-            {{ if eq .Section "shop" }}
-              <button
-                id="site-nav-cart-toggle"
-                class="cta-button site-nav__cta"
-                type="button"
-                style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;"
-              >
-                {{ $cartButtonLabel }}
-              </button>
-            {{ else }}
-              <a
-                class="cta-button site-nav__cta"
-                href="{{ "shop" | relLangURL }}"
-                style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;"
-              >
-                {{ if eq .Lang "en" }}shop now{{ else }}acquista{{ end }}
-              </a>
-            {{ end }}
-          </nav>
+          </div>
         </div>
+      </aside>
+    </div>
+
+    <div
+      id="shopify-cart-config"
+      data-shop-domain="{{ $shopDomain }}"
+      data-storefront-token="{{ $storefrontToken }}"
+      data-api-version="{{ $apiVersion }}"
+      data-cart-empty="{{ $cartEmpty }}"
+      data-total-label="{{ $totalLabel }}"
+      data-remove-label="{{ $removeLabel }}"
+      data-unavailable-cart-error="{{ $unavailableCartError }}"
+    ></div>
+    <aside id="shop-cart-drawer" class="shop-cart-drawer" hidden>
+      <div class="shop-cart-drawer__header">
+        <h2 class="shop-cart-drawer__title">{{ $cartTitle }}</h2>
+        <button id="shop-cart-close" class="shop-cart-drawer__close" type="button" aria-label="{{ $closeCartLabel }}">x</button>
       </div>
-    </header>
+      <div id="shop-cart-items" class="shop-cart-items">
+        <p class="shop-cart-empty">{{ $cartEmpty }}</p>
+      </div>
+      <div class="shop-cart-drawer__footer">
+        <p id="shop-cart-total" class="shop-cart-total">{{ $totalLabel }}: EUR 0,00</p>
+        <button id="shop-cart-checkout" class="shop-cart-checkout" type="button" disabled>{{ $checkoutLabel }}</button>
+      </div>
+    </aside>
   {{ end }}
   
   <main>
@@ -110,6 +227,8 @@
   <script src="{{ "js/section-transition.js" | relURL }}?v={{ $sectionTransitionJsVersion }}"></script>
   <script src="{{ "js/language-switch.js" | relURL }}?v={{ $languageSwitchJsVersion }}"></script>
   <script src="{{ "js/navbar.js" | relURL }}?v={{ $navbarJsVersion }}"></script>
+  <script src="{{ "js/nav-drawer.js" | relURL }}?v={{ $navDrawerJsVersion }}"></script>
+  <script src="{{ "js/shopify-cart.js" | relURL }}?v={{ $shopCartJsVersion }}"></script>
   <script src="{{ "js/footer-year.js" | relURL }}?v={{ $footerYearJsVersion }}"></script>
   
   {{ block "scripts" . }}{{ end }}

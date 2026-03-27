@@ -8,7 +8,7 @@
   {{ $missionSpacer := or $mission.spacer_image "images/flower.webp" }}
 
   <!-- Hero Section -->
-  <section class="section section--coral-red hero">
+  <section class="section section--coral-red hero" id="top">
     <div class="section__transition" aria-hidden="true"></div>
     <div class="hero__image hero__image--left">
       <img src="{{ (or $hero.left_image "images/fiore.webp") | relURL }}" alt="{{ or $hero.left_image_alt "Fiore" }}" />
@@ -52,7 +52,7 @@
   </section>
 
   <!-- Features Section -->
-  <section class="section section--coral-red section--products">
+  <section class="section section--coral-red section--products" id="products">
     <div class="section__transition" aria-hidden="true"></div>
     <div class="section__content">
       <img class="products__corner" src="{{ (or $products.corner_image "images/cachi.webp") | relURL }}" alt="" aria-hidden="true" />
@@ -72,7 +72,7 @@
   </section>
 
   <!-- Regenerative Agriculture Section -->
-  <section class="section section--peach">
+  <section class="section section--peach" id="regenerative">
     <div class="section__transition" aria-hidden="true"></div>
     <div class="section__content">
       <div class="container">

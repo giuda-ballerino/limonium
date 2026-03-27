@@ -1,6 +1,7 @@
 (function () {
   const STORAGE_KEY = "limonium_shopify_cart_id";
   const container =
+    document.getElementById("shopify-cart-config") ||
     document.getElementById("shopify-products") ||
     document.getElementById("shopify-product-detail");
   if (!container) return;
@@ -25,7 +26,7 @@
   let isLoading = false;
 
   const refs = {
-    toggle: document.getElementById("shop-cart-toggle") || document.getElementById("site-nav-cart-toggle"),
+    toggles: collectToggles(),
     close: document.getElementById("shop-cart-close"),
     drawer: document.getElementById("shop-cart-drawer"),
     count: document.getElementById("shop-cart-count"),
@@ -59,7 +60,9 @@
   }
 
   function bindEvents() {
-    if (refs.toggle) refs.toggle.addEventListener("click", openDrawer);
+    refs.toggles.forEach(function (toggle) {
+      toggle.addEventListener("click", openDrawer);
+    });
     if (refs.close) refs.close.addEventListener("click", closeDrawer);
     if (refs.checkout) {
       refs.checkout.addEventListener("click", function () {
@@ -486,5 +489,14 @@
     if (stored) return normalize(stored);
 
     return normalize(navigator.language || "it");
+  }
+
+  function collectToggles() {
+    const toggles = Array.from(document.querySelectorAll("[data-cart-toggle]"));
+    if (toggles.length) return toggles;
+    const fallback =
+      document.getElementById("shop-cart-toggle") ||
+      document.getElementById("site-nav-cart-toggle");
+    return fallback ? [fallback] : [];
   }
 })();

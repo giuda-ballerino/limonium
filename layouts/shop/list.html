@@ -62,28 +62,13 @@
           <p class="shop-message text-off-white">{{ $loadingLabel }}</p>
         </div>
 
-        <aside id="shop-cart-drawer" class="shop-cart-drawer" hidden>
-          <div class="shop-cart-drawer__header">
-            <h2 class="shop-cart-drawer__title">{{ $cartTitle }}</h2>
-            <button id="shop-cart-close" class="shop-cart-drawer__close" type="button" aria-label="{{ $closeCartLabel }}">x</button>
-          </div>
-          <div id="shop-cart-items" class="shop-cart-items">
-            <p class="shop-cart-empty">{{ $cartEmpty }}</p>
-          </div>
-          <div class="shop-cart-drawer__footer">
-            <p id="shop-cart-total" class="shop-cart-total">{{ $totalLabel }}: EUR 0,00</p>
-            <button id="shop-cart-checkout" class="shop-cart-checkout" type="button" disabled>{{ $checkoutLabel }}</button>
-          </div>
-        </aside>
       </div>
     </div>
   </section>
 {{ end }}
 
 {{ define "scripts" }}
-  {{ $shopCartJsVersion := md5 (readFile "static/js/shopify-cart.js") }}
   {{ $shopJsVersion := md5 (readFile "static/js/shopify-products.js") }}
-  <script src="{{ "js/shopify-cart.js" | relURL }}?v={{ $shopCartJsVersion }}"></script>
   <script src="{{ "js/shopify-products.js" | relURL }}?v={{ $shopJsVersion }}"></script>
 {{ end }}
 
