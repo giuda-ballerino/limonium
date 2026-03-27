@@ -1,0 +1,15 @@
+{{ define "main" }}
+  <section class="section section--lavender legal-page">
+    <div class="section__transition" aria-hidden="true"></div>
+    <div class="section__content">
+      <div class="container legal-page__container">
+        <div class="text-center mb-md">
+          <span class="section-heading section-heading--squiggle section-heading--white section-heading--bg-coral">{{ .Title }}</span>
+        </div>
+        <div class="legal-page__content text-off-white">
+          {{ .Content }}
+        </div>
+      </div>
+    </div>
+  </section>
+{{ end }}

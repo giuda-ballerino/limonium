@@ -5,11 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
   <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+  <link rel="icon" type="image/x-icon" href="{{ "images/favicon.ico" | relURL }}">
+  <link rel="shortcut icon" href="{{ "images/favicon.ico" | relURL }}">
   {{ $resetCssVersion := md5 (readFile "static/css/reset.css") }}
   {{ $mainCssVersion := md5 (readFile "static/css/main.css") }}
   {{ $sectionTransitionJsVersion := md5 (readFile "static/js/section-transition.js") }}
   {{ $navbarJsVersion := md5 (readFile "static/js/navbar.js") }}
   {{ $languageSwitchJsVersion := md5 (readFile "static/js/language-switch.js") }}
+  {{ $footerYearJsVersion := md5 (readFile "static/js/footer-year.js") }}
   
   <!-- CSS -->
   <link rel="stylesheet" href="{{ "css/reset.css" | relURL }}?v={{ $resetCssVersion }}">
@@ -107,6 +110,7 @@
   <script src="{{ "js/section-transition.js" | relURL }}?v={{ $sectionTransitionJsVersion }}"></script>
   <script src="{{ "js/language-switch.js" | relURL }}?v={{ $languageSwitchJsVersion }}"></script>
   <script src="{{ "js/navbar.js" | relURL }}?v={{ $navbarJsVersion }}"></script>
+  <script src="{{ "js/footer-year.js" | relURL }}?v={{ $footerYearJsVersion }}"></script>
   
   {{ block "scripts" . }}{{ end }}
 </body>
