@@ -143,6 +143,7 @@
         return renderProductCard(entry.product, shopDomain, entry.categoryName);
       });
       container.innerHTML = '<div class="shop-grid">' + cards.join("") + "</div>";
+      bindProgressiveImages(container);
     })
     .catch(function (error) {
       console.error("Shopify product loading error:", error);
@@ -235,9 +236,22 @@
           ${
             imageUrl
               ? `<a class="shop-card__image-link" href="${productUrl}" aria-label="${escapeHtml(ui.viewDetails)}: ${escapeHtml(product.title)}">
-                  <img class="shop-card__image" src="${imageUrl}" alt="${escapeHtml(
-                    imageAlt
-                  )}" loading="lazy" />
+                  <img
+                    class="shop-card__image-placeholder"
+                    src="${escapeHtml(getCardPlaceholderUrl(imageUrl))}"
+                    alt=""
+                    aria-hidden="true"
+                    decoding="async"
+                  />
+                  <img
+                    class="shop-card__image js-progressive-image is-loading"
+                    src="${escapeHtml(getCardImageUrl(imageUrl, 720))}"
+                    srcset="${escapeHtml(getCardSrcset(imageUrl))}"
+                    sizes="(max-width: 768px) 92vw, (max-width: 1100px) 45vw, 280px"
+                    alt="${escapeHtml(imageAlt)}"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </a>`
               : '<div class="shop-card__image shop-card__image--placeholder" aria-hidden="true"></div>'
           }
@@ -420,6 +434,67 @@
       style: "currency",
       currency: currency || "EUR",
     }).format(Number.isFinite(amount) ? amount : 0);
+  }
+
+  function getCardImageUrl(url, width) {
+    return buildShopifyImageUrl(url, {
+      width: width,
+      height: Math.round(width * 0.75),
+      crop: "center",
+      format: "webp",
+      quality: 78,
+    });
+  }
+
+  function getCardPlaceholderUrl(url) {
+    return buildShopifyImageUrl(url, {
+      width: 32,
+      height: 24,
+      crop: "center",
+      format: "webp",
+      quality: 30,
+    });
+  }
+
+  function getCardSrcset(url) {
+    const widths = [320, 480, 640, 800];
+    return widths
+      .map(function (w) {
+        return getCardImageUrl(url, w) + " " + w + "w";
+      })
+      .join(", ");
+  }
+
+  function bindProgressiveImages(root) {
+    if (!root) return;
+    root.querySelectorAll(".js-progressive-image").forEach(function (img) {
+      if (img.complete) {
+        img.classList.remove("is-loading");
+        return;
+      }
+      img.addEventListener(
+        "load",
+        function () {
+          img.classList.remove("is-loading");
+        },
+        { once: true }
+      );
+    });
+  }
+
+  function buildShopifyImageUrl(url, options) {
+    if (!url) return "";
+    try {
+      const next = new URL(url);
+      if (options && options.width) next.searchParams.set("width", String(options.width));
+      if (options && options.height) next.searchParams.set("height", String(options.height));
+      if (options && options.crop) next.searchParams.set("crop", String(options.crop));
+      if (options && options.format) next.searchParams.set("format", String(options.format));
+      if (options && options.quality) next.searchParams.set("quality", String(options.quality));
+      return next.toString();
+    } catch (_) {
+      return url;
+    }
   }
 
   function getPreferredLanguage() {

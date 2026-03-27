@@ -147,6 +147,7 @@
           '<div id="shop-detail-variant-panel"></div>' +
         "</div>" +
       "</div>";
+    bindProgressiveImages(container);
 
     const panel = document.getElementById("shop-detail-variant-panel");
     if (!panel) return;
@@ -170,7 +171,16 @@
     return (
       '<div class="shop-detail__main-image-wrap">' +
         (mainImage
-          ? '<img id="shop-detail-main-image" class="shop-detail__main-image" src="' + escapeHtml(mainImage.url) + '" alt="' + escapeHtml(mainImage.altText || fallbackAlt) + '" />'
+          ? '<img id="shop-detail-main-image-placeholder" class="shop-detail__main-image-placeholder" src="' +
+              escapeHtml(getDetailMainPlaceholderUrl(mainImage.url)) +
+              '" alt="" aria-hidden="true" decoding="async" />' +
+              '<img id="shop-detail-main-image" class="shop-detail__main-image js-progressive-image is-loading" src="' +
+              escapeHtml(getDetailMainImageUrl(mainImage.url, 1200)) +
+              '" srcset="' +
+              escapeHtml(getDetailMainSrcset(mainImage.url)) +
+              '" sizes="(max-width: 900px) 92vw, 52vw" alt="' +
+              escapeHtml(mainImage.altText || fallbackAlt) +
+              '" decoding="async" />'
           : '<div class="shop-detail__main-image shop-card__image--placeholder" aria-hidden="true"></div>') +
       "</div>" +
       (thumbs.length
@@ -178,8 +188,25 @@
             thumbs
               .map(function (img, index) {
                 return (
-                  '<button class="shop-detail__thumb' + (index === 0 ? " is-active" : "") + '" type="button" data-image-url="' + escapeHtml(img.url) + '" data-image-alt="' + escapeHtml(img.altText || fallbackAlt) + '">' +
-                    '<img src="' + escapeHtml(img.url) + '" alt="' + escapeHtml(img.altText || fallbackAlt) + '" loading="lazy" />' +
+                  '<button class="shop-detail__thumb' +
+                  (index === 0 ? " is-active" : "") +
+                  '" type="button" data-image-url="' +
+                  escapeHtml(img.url) +
+                  '" data-image-alt="' +
+                  escapeHtml(img.altText || fallbackAlt) +
+                  '">' +
+                    '<span class="shop-detail__thumb-media">' +
+                      '<img class="shop-detail__thumb-placeholder" src="' +
+                      escapeHtml(getDetailThumbPlaceholderUrl(img.url)) +
+                      '" alt="" aria-hidden="true" decoding="async" />' +
+                      '<img class="shop-detail__thumb-image js-progressive-image is-loading" src="' +
+                      escapeHtml(getDetailThumbUrl(img.url, 160)) +
+                      '" srcset="' +
+                      escapeHtml(getDetailThumbSrcset(img.url)) +
+                      '" sizes="72px" alt="' +
+                      escapeHtml(img.altText || fallbackAlt) +
+                      '" loading="lazy" decoding="async" />' +
+                    "</span>" +
                   "</button>"
                 );
               })
@@ -323,9 +350,16 @@
 
   function setMainImage(url, alt) {
     const main = document.getElementById("shop-detail-main-image");
+    const placeholder = document.getElementById("shop-detail-main-image-placeholder");
     if (!main) return;
-    main.setAttribute("src", url);
+    if (placeholder) {
+      placeholder.setAttribute("src", getDetailMainPlaceholderUrl(url));
+    }
+    main.classList.add("is-loading");
+    main.setAttribute("src", getDetailMainImageUrl(url, 1200));
+    main.setAttribute("srcset", getDetailMainSrcset(url));
     main.setAttribute("alt", alt);
+    watchImageLoad(main);
   }
 
   function findVariantBySelection(variants, selected) {
@@ -346,6 +380,99 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  }
+
+  function getDetailMainImageUrl(url, width) {
+    return buildShopifyImageUrl(url, {
+      width: width,
+      format: "webp",
+      quality: 82,
+    });
+  }
+
+  function getDetailMainPlaceholderUrl(url) {
+    return buildShopifyImageUrl(url, {
+      width: 40,
+      height: 30,
+      crop: "center",
+      format: "webp",
+      quality: 28,
+    });
+  }
+
+  function getDetailMainSrcset(url) {
+    const widths = [600, 900, 1200, 1600];
+    return widths
+      .map(function (w) {
+        return getDetailMainImageUrl(url, w) + " " + w + "w";
+      })
+      .join(", ");
+  }
+
+  function getDetailThumbUrl(url, width) {
+    return buildShopifyImageUrl(url, {
+      width: width,
+      height: width,
+      crop: "center",
+      format: "webp",
+      quality: 72,
+    });
+  }
+
+  function getDetailThumbPlaceholderUrl(url) {
+    return buildShopifyImageUrl(url, {
+      width: 28,
+      height: 28,
+      crop: "center",
+      format: "webp",
+      quality: 28,
+    });
+  }
+
+  function getDetailThumbSrcset(url) {
+    const widths = [100, 160, 240];
+    return widths
+      .map(function (w) {
+        return getDetailThumbUrl(url, w) + " " + w + "w";
+      })
+      .join(", ");
+  }
+
+  function buildShopifyImageUrl(url, options) {
+    if (!url) return "";
+    try {
+      const next = new URL(url);
+      if (options && options.width) next.searchParams.set("width", String(options.width));
+      if (options && options.height) next.searchParams.set("height", String(options.height));
+      if (options && options.crop) next.searchParams.set("crop", String(options.crop));
+      if (options && options.format) next.searchParams.set("format", String(options.format));
+      if (options && options.quality) next.searchParams.set("quality", String(options.quality));
+      return next.toString();
+    } catch (_) {
+      return url;
+    }
+  }
+
+  function bindProgressiveImages(root) {
+    if (!root) return;
+    root.querySelectorAll(".js-progressive-image").forEach(function (img) {
+      watchImageLoad(img);
+    });
+  }
+
+  function watchImageLoad(img) {
+    if (!img) return;
+    if (img.complete) {
+      img.classList.remove("is-loading");
+      return;
+    }
+    img.addEventListener(
+      "load",
+      function () {
+        img.classList.remove("is-loading");
+      },
+      { once: true }
+    );
   }
 
   function getPreferredLanguage() {

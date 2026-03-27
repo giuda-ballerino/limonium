@@ -958,10 +958,33 @@ a:hover {
 
 .shop-card__image-link {
   display: block;
+  position: relative;
+  overflow: hidden;
 }
 
 .shop-card__image-link:hover {
   opacity: 1;
+}
+
+.shop-card__image-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(12px);
+  transform: scale(1.06);
+}
+
+.shop-card__image.js-progressive-image {
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+.shop-card__image.js-progressive-image.is-loading {
+  opacity: 0;
 }
 
 .shop-card__image--placeholder {
@@ -1297,6 +1320,7 @@ a:hover {
   background: var(--color-off-white);
   border-radius: 14px;
   overflow: hidden;
+  position: relative;
 }
 
 .shop-detail__main-image {
@@ -1304,6 +1328,27 @@ a:hover {
   display: block;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+}
+
+.shop-detail__main-image-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(14px);
+  transform: scale(1.06);
+}
+
+.shop-detail__main-image.js-progressive-image {
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+.shop-detail__main-image.js-progressive-image.is-loading {
+  opacity: 0;
 }
 
 .shop-detail__thumbs {
@@ -1331,6 +1376,36 @@ a:hover {
   aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
+}
+
+.shop-detail__thumb-media {
+  position: relative;
+  display: block;
+}
+
+.shop-detail__thumb-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(10px);
+  transform: scale(1.08);
+}
+
+.shop-detail__thumb-image {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  opacity: 1;
+  transition: opacity 180ms ease;
+}
+
+.shop-detail__thumb-image.is-loading {
+  opacity: 0;
 }
 
 .shop-detail__title {
