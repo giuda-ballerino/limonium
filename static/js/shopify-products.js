@@ -234,9 +234,11 @@
         <div class="shop-card">
           ${
             imageUrl
-              ? `<img class="shop-card__image" src="${imageUrl}" alt="${escapeHtml(
-                  imageAlt
-                )}" loading="lazy" />`
+              ? `<a class="shop-card__image-link" href="${productUrl}" aria-label="${escapeHtml(ui.viewDetails)}: ${escapeHtml(product.title)}">
+                  <img class="shop-card__image" src="${imageUrl}" alt="${escapeHtml(
+                    imageAlt
+                  )}" loading="lazy" />
+                </a>`
               : '<div class="shop-card__image shop-card__image--placeholder" aria-hidden="true"></div>'
           }
           <div class="shop-card__body">
