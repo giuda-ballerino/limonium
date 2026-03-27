@@ -1749,6 +1749,11 @@ a:hover {
   align-items: end;
 }
 
+.shop-detail__controls-row--qty-only {
+  grid-template-columns: minmax(0, 140px);
+  justify-content: start;
+}
+
 .shop-detail__field--option {
   margin-bottom: 0;
   min-width: 0;
@@ -1759,6 +1764,11 @@ a:hover {
   max-width: 110px;
   justify-self: end;
   margin-bottom: 0;
+}
+
+.shop-detail__controls-row--qty-only .shop-detail__field--qty {
+  max-width: 140px;
+  justify-self: start;
 }
 
 .shop-detail__select,

@@ -241,12 +241,14 @@
         );
       })
       .join("");
+    const controlsRowClass =
+      "shop-detail__controls-row" + (options.length ? "" : " shop-detail__controls-row--qty-only");
 
     return (
       '<div class="shop-detail__price text-off-white">' + formatted + "</div>" +
       '<div class="shop-detail__options">' +
         '<p class="shop-detail__label text-off-white">' + escapeHtml(ui.selectOptions) + "</p>" +
-        '<div class="shop-detail__controls-row">' +
+        '<div class="' + controlsRowClass + '">' +
           selectors +
           '<label class="shop-detail__field shop-detail__field--qty text-off-white">' +
             "<span>" + escapeHtml(ui.quantityLabel) + "</span>" +
