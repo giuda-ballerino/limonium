@@ -12,12 +12,17 @@ content:
       - name: title
         label: Nome evento
         type: string
-      - name: date
+      - name: event_date
         label: Data evento
         type: date
       - name: image
         label: Immagine evento
         type: image
+      - name: description
+        label: Descrizione breve (max 150 caratteri)
+        type: string
+        options:
+          maxlength: 150
       - name: registration_url
         label: Link registrazione
         type: string

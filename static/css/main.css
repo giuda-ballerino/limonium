@@ -1665,6 +1665,13 @@ a:hover {
   line-height: 1.3;
 }
 
+.event-card__description {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
 .event-card__cta {
   margin-top: auto;
   padding-top: 0.75rem;
