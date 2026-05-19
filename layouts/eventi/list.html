@@ -7,9 +7,7 @@
           <span class="section-heading section-heading--squiggle section-heading--white section-heading--bg-coral">{{ if eq .Lang "en" }}events{{ else }}eventi{{ end }}</span>
         </div>
 
-        {{ if .Description }}
-          <p class="events__intro text-off-white">{{ .Description }}</p>
-        {{ end }}
+        <p class="events__intro text-off-white">{{ if eq .Lang "en" }}Discover upcoming Limonium Flower Farm events: workshops, parties and more.{{ else }}Scopri i prossimi eventi di Limonium Flower Farm: workshop, feste e molto altro.{{ end }}</p>
 
         <div class="events-grid" id="events-grid">
           {{ $events := slice }}
