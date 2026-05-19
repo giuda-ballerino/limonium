@@ -12,20 +12,25 @@ content:
       - name: title
         label: Nome evento
         type: string
+        required: true
       - name: event_date
         label: Data evento
         type: date
+        required: true
       - name: image
         label: Immagine evento
         type: image
+        required: true
       - name: description
         label: Descrizione breve (max 150 caratteri)
         type: string
+        required: true
         options:
           maxlength: 150
       - name: registration_url
         label: Link registrazione
         type: string
+        required: true
 
 settings:
   hide: true
