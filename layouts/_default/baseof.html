@@ -15,11 +15,11 @@
   {{ $navDrawerJsVersion := md5 (readFile "static/js/nav-drawer.js") }}
   {{ $shopCartJsVersion := md5 (readFile "static/js/shopify-cart.js") }}
   {{ $footerYearJsVersion := md5 (readFile "static/js/footer-year.js") }}
-  
+
   <!-- CSS -->
   <link rel="stylesheet" href="{{ "css/reset.css" | relURL }}?v={{ $resetCssVersion }}">
   <link rel="stylesheet" href="{{ "css/main.css" | relURL }}?v={{ $mainCssVersion }}">
-  
+
   {{ block "head" . }}{{ end }}
 </head>
 {{ $itURL := "" }}
@@ -40,35 +40,28 @@
     {{ $shopDomain := getenv "SHOPIFY_STORE_DOMAIN" }}
     {{ $storefrontToken := getenv "SHOPIFY_STOREFRONT_ACCESS_TOKEN" }}
     {{ $apiVersion := getenv "SHOPIFY_API_VERSION" | default "2025-01" }}
-    {{ $shopPage := .Site.GetPage "section" "shop" }}
-    {{ $ui := cond $shopPage $shopPage.Params.ui dict }}
     {{ $cartButtonLabel := cond (eq .Lang "en") "Cart" "Carrello" }}
-    {{ with $ui.cart_button }}
-      {{ $cartButtonLabel = . }}
-    {{ end }}
+    {{ $cartTitle := cond (eq .Lang "en") "Your cart" "Il tuo carrello" }}
+    {{ $cartEmpty := cond (eq .Lang "en") "Your cart is empty." "Il carrello è vuoto." }}
+    {{ $totalLabel := cond (eq .Lang "en") "Total" "Totale" }}
+    {{ $checkoutLabel := cond (eq .Lang "en") "Go to checkout" "Vai al checkout" }}
+    {{ $closeCartLabel := cond (eq .Lang "en") "Close cart" "Chiudi carrello" }}
+    {{ $removeLabel := cond (eq .Lang "en") "Remove" "Rimuovi" }}
+    {{ $unavailableCartError := cond (eq .Lang "en") "Product not available for sale." "Prodotto non disponibile per la vendita." }}
     {{ $shopCtaLabel := cond (eq .Lang "en") "shop now" "acquista" }}
-    {{ with $ui.buy_now }}
-      {{ $shopCtaLabel = . }}
-    {{ end }}
-    {{ $cartTitle := or $ui.cart_title (cond (eq .Lang "en") "Your cart" "Il tuo carrello") }}
-    {{ $cartEmpty := or $ui.cart_empty (cond (eq .Lang "en") "Your cart is empty." "Il carrello e' vuoto.") }}
-    {{ $totalLabel := or $ui.total_label (cond (eq .Lang "en") "Total" "Totale") }}
-    {{ $checkoutLabel := or $ui.checkout_button (cond (eq .Lang "en") "Go to checkout" "Vai al checkout") }}
-    {{ $closeCartLabel := or $ui.close_cart (cond (eq .Lang "en") "Close cart" "Chiudi carrello") }}
-    {{ $removeLabel := or $ui.remove (cond (eq .Lang "en") "Remove" "Rimuovi") }}
-    {{ $unavailableCartError := or $ui.unavailable_cart_error (cond (eq .Lang "en") "Product not available for sale." "Prodotto non disponibile per la vendita.") }}
-    {{ $navItURL := "" }}
-    {{ $navEnURL := "" }}
     {{ $homeURL := "/" | relLangURL }}
     {{ $missionURL := printf "%s#mission" $homeURL }}
     {{ $productsURL := printf "%s#products" $homeURL }}
-    {{ $regenerativeURL := printf "%s#regenerative" $homeURL }}
+    {{ $eventiURL := "eventi" | relLangURL }}
+    {{ $navItURL := "" }}
+    {{ $navEnURL := "" }}
     {{ if eq .Lang "it" }}{{ $navItURL = .RelPermalink }}{{ end }}
     {{ if eq .Lang "en" }}{{ $navEnURL = .RelPermalink }}{{ end }}
     {{ range .AllTranslations }}
       {{ if eq .Lang "it" }}{{ $navItURL = .RelPermalink }}{{ end }}
       {{ if eq .Lang "en" }}{{ $navEnURL = .RelPermalink }}{{ end }}
     {{ end }}
+
     <header class="site-header">
       <div class="container">
         <div class="site-header__content">
@@ -121,7 +114,7 @@
       ></button>
       <aside class="site-nav-drawer__panel" aria-label="{{ if eq .Lang "en" }}Navigation menu{{ else }}Menu di navigazione{{ end }}">
         <div class="site-nav-drawer__header">
-          <p class="site-nav-drawer__title">{{ if eq .Lang "en" }}Menu{{ else }}Menu{{ end }}</p>
+          <p class="site-nav-drawer__title">Menu</p>
           <button
             id="site-nav-drawer-close"
             class="site-nav-drawer__close"
@@ -137,6 +130,7 @@
             <nav class="site-nav-drawer__links" aria-label="{{ if eq .Lang "en" }}Navigation links{{ else }}Link navigazione{{ end }}">
               <a href="{{ $missionURL }}" data-drawer-close>{{ if eq .Lang "en" }}Mission{{ else }}Missione{{ end }}</a>
               <a href="{{ $productsURL }}" data-drawer-close>{{ if eq .Lang "en" }}Products{{ else }}Prodotti{{ end }}</a>
+              <a href="{{ $eventiURL }}" data-drawer-close>{{ if eq .Lang "en" }}Events{{ else }}Eventi{{ end }}</a>
             </nav>
           </div>
 
@@ -216,13 +210,13 @@
       </div>
     </aside>
   {{ end }}
-  
+
   <main>
     {{ block "main" . }}{{ end }}
   </main>
-  
+
   {{ block "footer" . }}{{ end }}
-  
+
   <!-- JavaScript -->
   <script src="{{ "js/section-transition.js" | relURL }}?v={{ $sectionTransitionJsVersion }}"></script>
   <script src="{{ "js/language-switch.js" | relURL }}?v={{ $languageSwitchJsVersion }}"></script>
@@ -230,7 +224,7 @@
   <script src="{{ "js/nav-drawer.js" | relURL }}?v={{ $navDrawerJsVersion }}"></script>
   <script src="{{ "js/shopify-cart.js" | relURL }}?v={{ $shopCartJsVersion }}"></script>
   <script src="{{ "js/footer-year.js" | relURL }}?v={{ $footerYearJsVersion }}"></script>
-  
+
   {{ block "scripts" . }}{{ end }}
 </body>
 </html>

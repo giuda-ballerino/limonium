@@ -1,71 +1,86 @@
 {{ define "main" }}
-  {{ $hero := .Params.hero }}
-  {{ $mission := .Params.mission }}
-  {{ $products := .Params.products }}
-  {{ $regenerative := .Params.regenerative }}
-  {{ $missionPhotos := or $mission.photos (slice (dict "image" "images/jojo.webp" "alt" "Jojo") (dict "image" "images/joscha.webp" "alt" "Joscha") (dict "image" "images/catel.webp" "alt" "Catel")) }}
-  {{ $regenerativeImages := or $regenerative.images (slice (dict "image" "images/g1.webp") (dict "image" "images/g2.webp") (dict "image" "images/g3.webp") (dict "image" "images/g4.webp") (dict "image" "images/g5.webp") (dict "image" "images/g6.webp")) }}
-  {{ $missionSpacer := or $mission.spacer_image "images/flower.webp" }}
-
   <!-- Hero Section -->
   <section class="section section--coral-red hero" id="top">
     <div class="section__transition" aria-hidden="true"></div>
     <div class="hero__image hero__image--left">
-      <img src="{{ (or $hero.left_image "images/fiore.webp") | relURL }}" alt="{{ or $hero.left_image_alt "Fiore" }}" />
+      <img src="{{ "images/fiore.webp" | relURL }}" alt="{{ if eq .Lang "en" }}Flower{{ else }}Fiore{{ end }}" />
     </div>
     <div class="hero__image hero__image--right">
-      <img src="{{ (or $hero.right_image "images/fico.webp") | relURL }}" alt="{{ or $hero.right_image_alt "Fico" }}" />
+      <img src="{{ "images/fico.webp" | relURL }}" alt="{{ if eq .Lang "en" }}Fig{{ else }}Fico{{ end }}" />
     </div>
     <div class="section__content">
       <div class="container hero__content">
         <div class="hero__logo">
           <img src="{{ "images/logo.svg" | relURL }}" alt="Limonium" />
         </div>
-        <p class="hero__subtitle">{{ or $hero.subtitle "flower farm\n+\nmarket garden" }}</p>
+        <p class="hero__subtitle">flower farm<br>+<br>market garden</p>
       </div>
     </div>
   </section>
 
-  <!-- About Section -->
+  <!-- Mission Section -->
   <section class="section section--lavender" id="mission">
     <div class="section__transition" aria-hidden="true"></div>
     <div class="section__content">
       <div class="container mission">
         <div class="text-center mb-sm">
-          <span class="section-heading section-heading--squiggle section-heading--white section-heading--bg-coral">{{ or $mission.heading "mission" }}</span>
+          <span class="section-heading section-heading--squiggle section-heading--white section-heading--bg-coral">mission</span>
         </div>
         <div class="mission__intro">
-          <img class="mission__icon" src="{{ (or $mission.icon "images/fede.webp") | relURL }}" alt="{{ or $mission.icon_alt "Fede" }}" />
-          <div class="mission__text text-off-white">{{ or $mission.intro "Limonium Flower Farm nasce a Selinunte con l'obiettivo di coltivare **fiori recisi, piante officinali e ortaggi di qualita'**, seguendo i principi della **permacultura** e dell'**agricoltura rigenerativa** per salvaguardare il suolo e valorizzare il territorio. Ci impegniamo a promuovere un **legame sostenibile** tra uomo e natura, utilizzando **varieta' locali**, sistemi di coltura efficienti e **filiera corta**." | markdownify }}</div>
+          <img class="mission__icon" src="{{ "images/fede.webp" | relURL }}" alt="Fede" />
+          <div class="mission__text text-off-white">
+            {{ if eq .Lang "en" }}
+              {{ "Limonium Flower Farm was born in Selinunte with the goal of growing **unique cut flowers, medicinal herbs, and high-quality vegetables**, following the principles of **permaculture** and **regenerative agriculture** to protect the soil and enhance the local territory. We are committed to building a **sustainable bond** between people and nature, using **local varieties**, efficient growing systems, and a **short supply chain**." | markdownify }}
+            {{ else }}
+              {{ "Limonium Flower Farm nasce a Selinunte con l'obiettivo di coltivare **fiori recisi, piante officinali e ortaggi di qualità**, seguendo i principi della **permacultura** e dell'**agricoltura rigenerativa** per salvaguardare il suolo e valorizzare il territorio. Ci impegniamo a promuovere un **legame sostenibile** tra uomo e natura, utilizzando **varietà locali**, sistemi di coltura efficienti e **filiera corta**." | markdownify }}
+            {{ end }}
+          </div>
         </div>
         <div class="mission__gallery">
-          {{ range $idx, $photo := $missionPhotos }}
-            {{ if gt $idx 0 }}
-              <img class="mission__spacer" src="{{ $missionSpacer | relURL }}" alt="" aria-hidden="true" />
-            {{ end }}
-            <img class="mission__photo" src="{{ (or $photo.image "images/jojo.webp") | relURL }}" alt="{{ or $photo.alt "Foto mission" }}" />
+          <img class="mission__photo" src="{{ "images/jojo.webp" | relURL }}" alt="Jojo" />
+          <img class="mission__spacer" src="{{ "images/flower.webp" | relURL }}" alt="" aria-hidden="true" />
+          <img class="mission__photo" src="{{ "images/joscha.webp" | relURL }}" alt="Joscha" />
+          <img class="mission__spacer" src="{{ "images/flower.webp" | relURL }}" alt="" aria-hidden="true" />
+          <img class="mission__photo" src="{{ "images/catel.webp" | relURL }}" alt="Catel" />
+        </div>
+        <div class="mission__text text-off-white">
+          {{ if eq .Lang "en" }}
+            {{ "Through **workshops and seminars**, we share our passion for the land, from **sowing to sales**, to create an authentic and conscious experience rooted in respect for **the environment and biodiversity**." | markdownify }}
+          {{ else }}
+            {{ "Con **workshop e seminari** trasferiamo la passione per la terra, dalla **semina alla vendita**, per creare un'esperienza autentica e consapevole di rispetto per l'**ambiente e la biodiversità**." | markdownify }}
           {{ end }}
         </div>
-        <div class="mission__text text-off-white">{{ or $mission.outro "Con **workshop e seminari** trasferiamo la passione per la terra, dalla **semina alla vendita**, per creare un'esperienza autentica e consapevole di rispetto per l'**ambiente e la biodiversita'**." | markdownify }}</div>
       </div>
     </div>
   </section>
 
-  <!-- Features Section -->
+  <!-- Products Section -->
   <section class="section section--coral-red section--products" id="products">
     <div class="section__transition" aria-hidden="true"></div>
     <div class="section__content">
-      <img class="products__corner" src="{{ (or $products.corner_image "images/cachi.webp") | relURL }}" alt="" aria-hidden="true" />
+      <img class="products__corner" src="{{ "images/cachi.webp" | relURL }}" alt="" aria-hidden="true" />
       <div class="container text-off-black">
         <div class="text-center mb-md">
-          <span class="section-heading section-heading--squiggle section-heading--black section-heading--bg-apricot">{{ or $products.heading "prodotti" }}</span>
+          <span class="section-heading section-heading--squiggle section-heading--black section-heading--bg-apricot">{{ if eq .Lang "en" }}products{{ else }}prodotti{{ end }}</span>
         </div>
         <div class="products__content">
-          <div class="products__text">{{ or $products.paragraph_one "Offriamo **fiori recisi unici**, **piante officinali**, **ortaggi freschi** e **olio extravergine di oliva biologico**, ottenuto da olive **Nocellara del Belice** senza pesticidi." | markdownify }}</div>
-          <div class="products__text">{{ or $products.paragraph_two "L'olio viene lavorato con tecniche che ne preservano **aroma** e **proprieta' nutritive**. Puoi acquistare in azienda o prenotare la consegna a domicilio, assicurandoti prodotti **freschi**, **genuini** e **tracciabili**." | markdownify }}</div>
+          <div class="products__text">
+            {{ if eq .Lang "en" }}
+              {{ "We offer **distinctive cut flowers**, **medicinal herbs**, **fresh vegetables**, and **organic extra virgin olive oil**, produced from **Nocellara del Belice** olives without pesticides." | markdownify }}
+            {{ else }}
+              {{ "Offriamo **fiori recisi unici**, **piante officinali**, **ortaggi freschi** e **olio extravergine di oliva biologico**, ottenuto da olive **Nocellara del Belice** senza pesticidi." | markdownify }}
+            {{ end }}
+          </div>
+          <div class="products__text">
+            {{ if eq .Lang "en" }}
+              {{ "Our olive oil is processed with methods that preserve its **aroma** and **nutritional properties**. You can buy directly at the farm or book home delivery, ensuring products that are **fresh**, **genuine**, and **traceable**." | markdownify }}
+            {{ else }}
+              {{ "L'olio viene lavorato con tecniche che ne preservano **aroma** e **proprietà nutritive**. Puoi acquistare in azienda o prenotare la consegna a domicilio, assicurandoti prodotti **freschi**, **genuini** e **tracciabili**." | markdownify }}
+            {{ end }}
+          </div>
         </div>
         <div class="products__actions">
-          <a class="cta-button" href="{{ "shop" | relLangURL }}" style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;">{{ or $products.cta_label "acquista" }}</a>
+          <a class="cta-button" href="{{ "shop" | relLangURL }}" style="--cta-bg: #52489C; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #52489C; --cta-hover-border: #52489C;">{{ if eq .Lang "en" }}shop now{{ else }}acquista{{ end }}</a>
         </div>
       </div>
     </div>
@@ -77,12 +92,12 @@
     <div class="section__content">
       <div class="container">
         <div class="text-center mb-lg">
-          <h2 class="section-title text-off-black">{{ or $regenerative.title "Agricoltura rigenerativa, sostenibilita' e passione per la natura" }}</h2>
+          <h2 class="section-title text-off-black">{{ if eq .Lang "en" }}Regenerative agriculture, sustainability, and passion for nature{{ else }}Agricoltura rigenerativa, sostenibilità e passione per la natura{{ end }}</h2>
         </div>
         <div class="gallery">
-          {{ range $img := $regenerativeImages }}
+          {{ range slice "images/g1.webp" "images/g2.webp" "images/g3.webp" "images/g4.webp" "images/g5.webp" "images/g6.webp" }}
             <div class="gallery__item">
-              <img src="{{ (or $img.image "images/g1.webp") | relURL }}" alt="" aria-hidden="true" />
+              <img src="{{ . | relURL }}" alt="" aria-hidden="true" />
             </div>
           {{ end }}
         </div>
