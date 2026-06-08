@@ -77,6 +77,22 @@
             <img src="{{ "images/logo.svg" | relURL }}" alt="Limonium" />
           </a>
           <nav class="site-nav" aria-label="Primary">
+            <a
+              class="cta-button site-nav__cta site-nav__extra"
+              href="{{ $eventiURL }}"
+              style="--cta-bg: #CC5151; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #CC5151; --cta-hover-border: #CC5151;"
+            >
+              {{ if eq .Lang "en" }}events{{ else }}eventi{{ end }}
+            </a>
+            <a
+              class="cta-button site-nav__cta site-nav__extra"
+              href="https://form.jotform.com/261303299273054"
+              target="_blank"
+              rel="noopener"
+              style="--cta-bg: #DE8756; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #DE8756; --cta-hover-border: #DE8756;"
+            >
+              {{ if eq .Lang "en" }}membership{{ else }}tesseramento{{ end }}
+            </a>
             {{ if eq .Section "shop" }}
               <button
                 id="site-nav-cart-toggle"
