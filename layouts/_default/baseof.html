@@ -86,7 +86,7 @@
             </a>
             <a
               class="cta-button site-nav__cta site-nav__extra"
-              href="https://form.jotform.com/261303299273054"
+              href="{{ site.Data.settings.tesseramento_url }}"
               target="_blank"
               rel="noopener"
               style="--cta-bg: #DE8756; --cta-text: #FFEBEB; --cta-border: #0A0A0A; --cta-hover-bg: #FFEBEB; --cta-hover-text: #DE8756; --cta-hover-border: #DE8756;"
@@ -131,7 +131,7 @@
 
     <a
       class="tesseramento-fab"
-      href="https://form.jotform.com/261303299273054"
+      href="{{ site.Data.settings.tesseramento_url }}"
       target="_blank"
       rel="noopener"
       aria-label="{{ if eq .Lang "en" }}Join Chóra Cultural Association{{ else }}Tesseramento Associazione Culturale Chóra{{ end }}"
@@ -165,7 +165,7 @@
               <a href="{{ $missionURL }}" data-drawer-close>{{ if eq .Lang "en" }}Mission{{ else }}Missione{{ end }}</a>
               <a href="{{ $productsURL }}" data-drawer-close>{{ if eq .Lang "en" }}Products{{ else }}Prodotti{{ end }}</a>
               <a href="{{ $eventiURL }}" data-drawer-close>{{ if eq .Lang "en" }}Events{{ else }}Eventi{{ end }}</a>
-              <a href="https://form.jotform.com/261303299273054" target="_blank" rel="noopener">{{ if eq .Lang "en" }}Membership{{ else }}Tesseramento{{ end }}</a>
+              <a href="{{ site.Data.settings.tesseramento_url }}" target="_blank" rel="noopener">{{ if eq .Lang "en" }}Membership{{ else }}Tesseramento{{ end }}</a>
             </nav>
           </div>
 

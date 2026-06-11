@@ -32,5 +32,14 @@ content:
         type: string
         required: true
 
+  - name: impostazioni
+    label: Impostazioni
+    type: file
+    path: data/settings.yaml
+    fields:
+      - name: tesseramento_url
+        label: Link tesseramento
+        type: string
+
 settings:
   hide: true
